@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOMAR OSINT – Professional Intelligence Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0f121a;
+            --card: #161b22;
+            --text: #e2e8f0;
+            --accent: #3b82f6;
+            --accent-hover: #2563eb;
+            --border: #2d3748;
+            --glow: rgba(59, 130, 246, 0.25);
+            --success: #10b981;
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --border: #e2e8f0;
+            --glow: rgba(37, 99, 235, 0.15);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            transition: background 0.5s ease, color 0.5s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--accent), #60a5fa);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .controls button {
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-left: 12px;
+        }
+
+        .controls button:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-1px);
+        }
+
+        .home, .chat {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .home.hidden, .chat.hidden { display: none; }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--card);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            background: linear-gradient(90deg, var(--accent), #a5b4fc);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 48px;
+        }
+
+        .feature {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px var(--glow);
+        }
+
+        .feature h3 {
+            color: var(--accent);
+            margin-bottom: 16px;
+            font-size: 1.4rem;
+        }
+
+        .feature ul {
+            list-style: none;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .feature li {
+            margin-bottom: 8px;
+            position: relative;
+            padding-left: 28px;
+        }
+
+        .feature li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .start-btn {
+            display: block;
+            width: fit-content;
+            margin: 48px auto 0;
+            padding: 16px 48px;
+            background: var(--accent);
+            color: white;
+            font-size: 1.3rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .start-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(59,130,246,0.35);
+        }
+
+        .chat {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            background: rgba(15,23,42,0.7);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .messages {
+            padding: 24px;
+            height: 60vh;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 14px;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .sent {
+            background: var(--accent);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .received {
+            background: #1e293b;
+            border: 1px solid var(--border);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+
+        .file-download {
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            background: rgba(16,185,129,0.15);
+            border: 1px solid rgba(16,185,129,0.4);
+            color: #10b981;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.25s;
+        }
+
+        .file-download:hover {
+            background: rgba(16,185,129,0.25);
+            border-color: #10b981;
+            transform: translateY(-2px);
+        }
+
+        .input-area {
+            padding: 16px 24px;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px 18px;
+            background: #0f172a;
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        button.primary {
+            padding: 14px 28px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button.primary:hover {
+            background: var(--accent-hover);
+        }
+
+        .pagination {
+            padding: 16px 24px;
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            font-size: 0.95rem;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+    <div class="container">
+        <!-- Home Page -->
+        <div class="home" id="home">
+            <header>
+                <div class="logo">TOMAR OSINT</div>
+                <div>
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                </div>
+            </header>
+
+            <div class="hero">
+                <h1>Advanced Open-Source Intelligence Platform</h1>
+                <p>
+                    TOMAR OSINT provides fast, ethical, and powerful access to publicly available information from multiple sources. Designed for researchers, investigators, journalists, and security professionals.
+                </p>
+
+                <button class="start-btn" id="startBtn">
+                    <i class="fas fa-search"></i> Start Intelligence Gathering
+                </button>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <h3><i class="fas fa-envelope"></i> Email Search</h3>
+                    <ul>
+                        <li>example@gmail.com</li>
+                        <li>example@ (any domain)</li>
+                        <li>@gmail.com (domain only)</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fas fa-user"></i> Name / Nickname</h3>
+                    <ul>
+                        <li>Petrov</li>
+                        <li>Petrov Maxim</li>
+                        <li>Petrov Maxim Sergeevich</li>
+                        <li>ShadowPlayer228</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fas fa-phone"></i> Phone Number</h3>
+                    <ul>
+                        <li>+79002206090</li>
+                        <li>79002206090</li>
+                        <li>89002206090</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fas fa-key"></i> Password Search</h3>
+                    <ul>
+                        <li>123qwe</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fas fa-car"></i> Vehicle Search</h3>
+                    <ul>
+                        <li>O999МУ777 (Russia)</li>
+                        <li>ВО4561АХ (Criminal Code)</li>
+                        <li>XTA21150053965897 (VIN)</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fab fa-telegram-plane"></i> Telegram Account</h3>
+                    <ul>
+                        <li>Petrov Ivan</li>
+                        <li>314159265 (ID)</li>
+                        <li>@Petivan (username)</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fab fa-vk"></i> VK / Facebook / Instagram</h3>
+                    <ul>
+                        <li>Name Surname</li>
+                        <li>User ID</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fas fa-map-marker-alt"></i> IP Address</h3>
+                    <ul>
+                        <li>127.0.0.1</li>
+                    </ul>
+                </div>
+
+                <div class="feature">
+                    <h3><i class="fas fa-file-lines"></i> Mass Search (File)</h3>
+                    <p>Upload UTF-8 file with one query per line. Supports mixed formats.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat / Search Interface -->
+        <div class="chat hidden" id="chat">
+            <header>
+                <div class="logo">TOMAR OSINT</div>
+                <div>
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                    <button class="reset-btn" id="resetBtn"><i class="fas fa-trash-alt"></i> Reset Session</button>
+                </div>
+            </header>
+
+            <div class="chat-container">
+                <div class="chat-header">
+                    <span>Live Intelligence Feed</span>
+                    <span class="status" id="status">Connected</span>
+                </div>
+
+                <div class="messages" id="messages"></div>
+
+                <div class="pagination">
+                    <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
+                    <span id="pageInfo">Page 1 / 1</span>
+                    <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+
+                <button class="full-download" id="downloadBtn">
+                    <i class="fas fa-file-export"></i> Export Full Session Log
+                </button>
+
+                <div class="input-area">
+                    <input type="text" id="text" placeholder="Enter your query (email, phone, name, username, etc.)..." autocomplete="off">
+                    <button id="sendBtn"><i class="fas fa-paper-plane"></i> Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.onclick = () => {
+            const current = document.body.dataset.theme;
+            document.body.dataset.theme = current === 'light' ? 'dark' : 'light';
+            themeToggle.innerHTML = current === 'light' 
+                ? '<i class="fas fa-moon"></i>' 
+                : '<i class="fas fa-sun"></i>';
+        };
+
+        // Show chat page
+        document.getElementById('startBtn').onclick = () => {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('chat').classList.remove('hidden');
+        };
+
+        // Reset session
+        document.getElementById('resetBtn').onclick = async () => {
+            if (confirm("Clear all messages and reset session?")) {
+                allMessages = [];
+                renderPage(1);
+                // Optional: tell backend to reset (if you have /reset command)
+                await fetch('/send', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: 'text=/reset'
+                });
+            }
+        };
+
+        // ──────────────────────────────────────────────
+        // Your existing chat logic (paste your renderPage, loadMessages, etc. here)
+        // Example placeholder – replace with your real code
+        // ──────────────────────────────────────────────
+
+        const messagesDiv = document.getElementById('messages');
+        const input = document.getElementById('text');
+        const sendBtn = document.getElementById('sendBtn');
+        const status = document.getElementById('status');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageInfo = document.getElementById('pageInfo');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        let allMessages = [];
+        let currentPage = 1;
+        const messagesPerPage = 20;
+
+        async function sendMessage() {
+            const text = input.value.trim();
+            if (!text) return;
+
+            status.textContent = "Searching...";
+            input.value = "";
+
+            try {
+                const res = await fetch('/send', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                if (!res.ok) throw new Error();
+                status.textContent = "Done";
+                setTimeout(() => status.textContent = "Connected", 1000);
+            } catch {
+                status.textContent = "Error";
+                status.style.color = "#ef4444";
+            }
+        }
+
+        sendBtn.onclick = sendMessage;
+        input.addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
+
+        async function loadMessages() {
+            try {
+                const res = await fetch('/messages');
+                const data = await res.json();
+                allMessages = data.messages || [];
+                renderPage(currentPage);
+            } catch {}
+        }
+
+        function renderPage(page) {
+            // Your existing render logic goes here
+            // Make sure it includes the file download button
+            // Example:
+            currentPage = page;
+            const start = (page - 1) * messagesPerPage;
+            const end = start + messagesPerPage;
+            const msgs = allMessages.slice(start, end);
+
+            messagesDiv.innerHTML = '';
+
+            msgs.forEach(msg => {
+                const div = document.createElement('div');
+                div.className = `message ${msg.sender === 'You' ? 'sent' : 'received'}`;
+
+                let html = `
+                    <small>${msg.time} • ${msg.sender}</small>
+                    ${msg.text.replace(/\n/g, '<br>')}
+                `;
+
+                if (msg.file_path) {
+                    html += `
+                        <a href="/file/${encodeURIComponent(msg.file_path)}" 
+                           download="${msg.file_path}"
+                           class="file-download">
+                            <i class="fas fa-download"></i> Download ${msg.file_path}
+                        </a>
+                    `;
+                }
+
+                div.innerHTML = html;
+                messagesDiv.appendChild(div);
+            });
+
+            const total = Math.ceil(allMessages.length / messagesPerPage) || 1;
+            pageInfo.textContent = `Page ${page} / ${total}`;
+
+            prevBtn.disabled = page === 1;
+            nextBtn.disabled = page >= total;
+
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        prevBtn.onclick = () => currentPage > 1 && renderPage(currentPage - 1);
+        nextBtn.onclick = () => (currentPage * messagesPerPage < allMessages.length) && renderPage(currentPage + 1);
+
+        downloadBtn.onclick = () => {
+            if (!allMessages.length) return alert("No data to export");
+            const txt = allMessages.map(m => `[${m.time}] ${m.sender}: ${m.text}`).join('\n');
+            const blob = new Blob([txt], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tomar_osint_export_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        // Initial load + auto-refresh
+        loadMessages();
+        setInterval(loadMessages, 5000);
+    </script>
+</body>
+</html>

@@ -36,6 +36,20 @@
             min-height: 100vh;
             line-height: 1.6;
             user-select: none;
+            transition: all 0.6s ease;
+        }
+        .disabled {
+            background: #000 !important;
+            color: #fff !important;
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            text-align: center;
+            padding: 2rem;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem; position: relative; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; animation: slideDown 1s ease-out; }
@@ -71,19 +85,8 @@
         button.primary { padding: 1rem 2.2rem; background: linear-gradient(135deg, var(--accent), #fecaca); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; }
         button.primary:hover { transform: scale(1.04); box-shadow: 0 10px 25px rgba(251,146,60,0.4); }
         .footer { text-align: center; margin-top: 2rem; font-size: 0.9rem; opacity: 0.8; }
-        /* Unauthorized alert style */
-        .unauthorized-alert {
-            background: rgba(239,68,68,0.15);
-            border: 2px solid var(--danger);
-            color: var(--danger);
-            padding: 1.5rem;
-            margin: 1rem 0;
-            border-radius: 12px;
-            font-weight: bold;
-            text-align: center;
-            animation: pulse 1.5s infinite;
-        }
-        /* Hidden password prompt - bottom right - INVISIBLE until needed */
+        .unauthorized-alert { background: rgba(239,68,68,0.15); border: 2px solid var(--danger); color: var(--danger); padding: 1.5rem; margin: 1rem 0; border-radius: 12px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite; }
+        /* Lock - starts invisible */
         #auth-lock {
             position: fixed;
             bottom: 20px;
@@ -102,13 +105,11 @@
             z-index: 9999;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.4s ease;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
         }
-        #auth-lock.visible {
-            opacity: 1;
-            visibility: visible;
-        }
+        #auth-lock.visible { opacity: 1; visibility: visible; }
         #auth-lock:hover { transform: scale(1.1); }
+        /* Password prompt */
         #password-prompt {
             position: fixed;
             bottom: 90px;
@@ -140,6 +141,7 @@
             cursor: pointer;
         }
         #password-prompt button:hover { background: var(--accent-hover); }
+        #password-error { color: var(--danger); margin-top: 8px; display:none; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
@@ -196,16 +198,20 @@
             <div class="footer">Developed by Tomar</div>
         </div>
 
-        <!-- Hidden lock icon - starts INVISIBLE -->
-        <div id="auth-lock" title="Admin Lock"><i class="fas fa-lock"></i></div>
+        <!-- Invisible lock area (clickable but no visible icon until needed) -->
+        <div id="auth-lock" title="Admin Lock"><i class="fas fa-lock" style="opacity:0;"></i></div>
 
-        <!-- Password prompt popup -->
+        <!-- Password prompt -->
         <div id="password-prompt">
             <h3 style="margin:0 0 10px; color:var(--accent);">Enter Password</h3>
-            <p style="font-size:0.9rem; margin-bottom:10px;">Hint: Current time (HHMM format)</p>
-            <input type="password" id="password-input" placeholder="e.g. 1518">
+            <input type="password" id="password-input" placeholder="Enter password">
             <button id="password-submit">Unlock</button>
             <p id="password-error" style="color:var(--danger); margin-top:8px; display:none;">Wrong password – try again</p>
+        </div>
+
+        <!-- Disable overlay (black screen) -->
+        <div id="disable-overlay" class="disabled" style="display:none;">
+            This website has been disabled by the creator for security reasons.
         </div>
     </div>
 
@@ -218,7 +224,6 @@
             themeToggle.innerHTML = current === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
         };
 
-        // Elements
         const messagesDiv = document.getElementById('messages');
         const input = document.getElementById('text');
         const sendBtn = document.getElementById('sendBtn');
@@ -230,16 +235,17 @@
         const passwordInput = document.getElementById('password-input');
         const passwordSubmit = document.getElementById('password-submit');
         const passwordError = document.getElementById('password-error');
+        const disableOverlay = document.getElementById('disable-overlay');
 
         let allMessages = [];
         let pollingInterval = null;
+        let isSiteDisabled = false;
         let isAuthorized = false;
 
-        // Blocked words/numbers
         const blockedTerms = ['ompal', 'tomar', 'aditya', '13341', '735154', '17999'];
+        const KILL_PASSWORD = '2048006969';
 
         function addMessage(sender, time, text, file_path = null) {
-            // Filter analytics spam
             if (text.includes("You are shown") || text.includes("This limit can be increased") ||
                 text.includes("free version") || text.includes("Buying a subscription") ||
                 text.includes("Mirror (in case of removal") || text.includes("The number of leaks:") ||
@@ -270,23 +276,23 @@
         }
 
         async function sendMessage() {
+            if (isSiteDisabled) return;
+
             let text = input.value.trim();
             if (!text) return;
 
-            // Block commands starting with /
             if (text.startsWith('/')) {
                 addMessage("System", new Date().toLocaleString(), "Commands starting with / are blocked for safety 🌅");
                 input.value = "";
                 return;
             }
 
-            // Check for blocked words/numbers
             const lowerText = text.toLowerCase();
             if (blockedTerms.some(term => lowerText.includes(term))) {
                 if (!isAuthorized) {
                     addMessage("System", new Date().toLocaleString(), 
                         '<div class="unauthorized-alert">UNAUTHORISED SEARCH DETECTED<br>Access restricted.</div>');
-                    authLock.classList.add('visible');  // show lock only when blocked
+                    authLock.classList.add('visible');  // only show lock after block
                     input.value = "";
                     return;
                 }
@@ -324,6 +330,7 @@
         });
 
         async function loadMessages() {
+            if (isSiteDisabled) return;
             try {
                 const res = await fetch('/messages');
                 const data = await res.json();
@@ -352,7 +359,7 @@
         };
 
         document.getElementById('resetBtn').onclick = async () => {
-            if (!confirm("Clear chat completely? This removes everything.")) return;
+            if (!confirm("Clear chat completely?")) return;
             if (pollingInterval) {
                 clearInterval(pollingInterval);
                 pollingInterval = null;
@@ -427,30 +434,63 @@
             }
         });
 
-        // Password lock logic - only show when unauthorized search detected
+        // Lock & password logic
         authLock.onclick = () => {
-            passwordPrompt.style.display = passwordPrompt.style.display === 'block' ? 'none' : 'block';
+            passwordPrompt.style.display = 'block';
             passwordError.style.display = 'none';
             passwordInput.value = '';
         };
 
         passwordSubmit.onclick = () => {
+            const inputVal = passwordInput.value.trim();
+
+            // Kill switch password
+            if (inputVal === '2048006969') {
+                isSiteDisabled = true;
+                disableOverlay.style.display = 'flex';
+                passwordPrompt.style.display = 'none';
+                authLock.style.display = 'block'; // make clickable area visible again (but still no icon)
+                authLock.innerHTML = '<i class="fas fa-lock" style="opacity:0;"></i>'; // keep it invisible but clickable
+                addMessage("System", new Date().toLocaleString(), "Site disabled globally by security protocol.");
+                return;
+            }
+
+            // Normal time-based password
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
             const mm = String(now.getMinutes()).padStart(2, '0');
-            const correctPassword = hh + mm;
+            const correct = hh + mm;
 
-            if (passwordInput.value === correctPassword) {
+            if (inputVal === correct) {
                 isAuthorized = true;
                 authLock.classList.remove('visible');
                 passwordPrompt.style.display = 'none';
-                addMessage("System", new Date().toLocaleString(), "Access granted – all searches now allowed 🌟");
-                // Optional: remove any remaining alert messages from chat if you want
+                addMessage("System", new Date().toLocaleString(), "Access granted – all searches allowed 🌟");
             } else {
                 passwordError.style.display = 'block';
             }
         };
 
+        // Re-enable after kill switch (invisible click area)
+        authLock.addEventListener('click', () => {
+            if (isSiteDisabled) {
+                passwordPrompt.style.display = 'block';
+                passwordError.style.display = 'none';
+                passwordInput.value = '';
+            }
+        });
+
+        passwordSubmit.addEventListener('click', () => {
+            const inputVal = passwordInput.value.trim();
+            if (inputVal === '2048006969' && isSiteDisabled) {
+                isSiteDisabled = false;
+                disableOverlay.style.display = 'none';
+                passwordPrompt.style.display = 'none';
+                addMessage("System", new Date().toLocaleString(), "Site re-enabled – normal operation restored 🌅");
+            }
+        });
+
+        // Hide prompt when clicking outside
         document.addEventListener('click', e => {
             if (!authLock.contains(e.target) && !passwordPrompt.contains(e.target)) {
                 passwordPrompt.style.display = 'none';

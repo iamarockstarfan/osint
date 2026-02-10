@@ -7,27 +7,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #0f0f1a;
-            --card: #161b2e;
-            --text: #e2e8f9;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --success: #10b981;
+            --bg: #fff7e6; /* Warm yellowish background */
+            --card: #ffe4e1; /* Soft pinkish card */
+            --text: #4a1a00; /* Dark warm text for contrast */
+            --accent: #fdba74; /* Yellowish-orange sunset accent */
+            --accent-hover: #fb923c; /* Deeper orange hover */
+            --success: #34d399; /* Positive green */
             --danger: #ef4444;
-            --border: #2d3748;
-            --glow: rgba(99, 102, 241, 0.35);
-            --shadow: 0 10px 30px rgba(0,0,0,0.5);
+            --border: #fed7aa; /* Soft orange border */
+            --glow: rgba(253, 186, 116, 0.45); /* Warm glow */
+            --shadow: 0 10px 30px rgba(251, 146, 60, 0.3); /* Sunset shadow */
         }
 
-        [data-theme="light"] {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --border: #e2e8f0;
-            --glow: rgba(99, 102, 241, 0.25);
-            --shadow: 0 8px 25px rgba(0,0,0,0.12);
+        [data-theme="dark"] {
+            --bg: #1e0400; /* Deep sunset dark */
+            --card: #3b0a00;
+            --text: #ffdab9;
+            --accent: #fdba74;
+            --accent-hover: #fb923c;
+            --border: #7c2d12;
+            --glow: rgba(253, 186, 116, 0.35);
+            --shadow: 0 10px 30px rgba(154, 52, 18, 0.5);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -54,16 +54,18 @@
             padding: 1.25rem 0;
             border-bottom: 1px solid var(--border);
             margin-bottom: 2.5rem;
+            animation: slideDown 1s ease-out;
         }
 
         .logo {
             font-size: 2.25rem;
             font-weight: 800;
-            background: linear-gradient(90deg, var(--accent), #a5b4fc);
+            background: linear-gradient(90deg, var(--accent), #fecaca);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
+            animation: pulseGlow 2s infinite alternate;
         }
 
         .controls button {
@@ -82,12 +84,12 @@
             background: var(--accent);
             color: white;
             border-color: var(--accent);
-            transform: translateY(-2px);
+            transform: translateY(-2px) rotate(3deg);
             box-shadow: var(--shadow);
         }
 
         .home, .chat {
-            animation: fadeIn 0.9s ease-out;
+            animation: fadeIn 1.2s ease-out, bounceIn 0.8s ease-out;
         }
 
         .home.hidden, .chat.hidden { display: none; }
@@ -100,16 +102,18 @@
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
             margin-bottom: 3rem;
+            animation: floatUp 1.5s ease-out;
         }
 
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1.2rem;
             font-weight: 800;
-            background: linear-gradient(90deg, var(--accent), #c084fc);
+            background: linear-gradient(90deg, var(--accent), #fecaca);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: textShine 3s infinite linear;
         }
 
         .hero p {
@@ -117,6 +121,7 @@
             max-width: 720px;
             margin: 0 auto 2.5rem;
             opacity: 0.9;
+            animation: fadeIn 1.5s ease-out 0.5s forwards;
         }
 
         .features {
@@ -132,11 +137,12 @@
             border-radius: 16px;
             padding: 2rem;
             transition: all 0.4s ease;
+            animation: scaleIn 1s ease-out;
         }
 
         .feature:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 2px var(--glow);
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(251, 146, 60, 0.4), 0 0 0 2px var(--glow);
         }
 
         .feature h3 {
@@ -154,10 +160,11 @@
             margin-bottom: 0.8rem;
             position: relative;
             padding-left: 1.8rem;
+            animation: slideLeft 0.8s ease-out forwards;
         }
 
         .feature li::before {
-            content: "→";
+            content: "🌅"; /* Sunset emoji for positive vibe */
             position: absolute;
             left: 0;
             color: var(--accent);
@@ -169,7 +176,7 @@
             width: fit-content;
             margin: 4rem auto 0;
             padding: 1.2rem 3.5rem;
-            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            background: linear-gradient(135deg, var(--accent), #fecaca);
             color: white;
             font-size: 1.35rem;
             font-weight: 700;
@@ -177,12 +184,13 @@
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.35s ease;
-            box-shadow: 0 10px 30px rgba(99,102,241,0.4);
+            box-shadow: 0 10px 30px rgba(251, 146, 60, 0.4);
+            animation: bounce 1.5s infinite;
         }
 
         .start-btn:hover {
-            transform: translateY(-5px) scale(1.04);
-            box-shadow: 0 20px 50px rgba(99,102,241,0.5);
+            transform: translateY(-5px) scale(1.05) rotate(1deg);
+            box-shadow: 0 20px 50px rgba(251, 146, 60, 0.5);
         }
 
         .chat {
@@ -191,22 +199,25 @@
             overflow: hidden;
             box-shadow: var(--shadow);
             border: 1px solid var(--border);
+            animation: expandIn 1s ease-out;
         }
 
         .chat-header {
             padding: 1.2rem 2rem;
-            background: rgba(15,23,42,0.6);
+            background: rgba(251, 146, 60, 0.1);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
             font-size: 1.1rem;
+            animation: fadeIn 1s ease-out;
         }
 
         .status {
             color: var(--success);
             font-weight: 500;
+            animation: pulse 2s infinite;
         }
 
         .messages {
@@ -222,20 +233,20 @@
             max-width: 82%;
             padding: 1rem 1.4rem;
             border-radius: 18px;
-            animation: slideIn 0.5s ease-out;
+            animation: slideIn 0.6s ease-out, bounceIn 0.4s ease-out;
             line-height: 1.5;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 8px rgba(251, 146, 60, 0.3);
         }
 
         .sent {
-            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            background: linear-gradient(135deg, var(--accent), #fecaca);
             color: white;
             margin-left: auto;
             border-bottom-right-radius: 6px;
         }
 
         .received {
-            background: #1e293b;
+            background: #fff7e6;
             border: 1px solid var(--border);
             margin-right: auto;
             border-bottom-left-radius: 6px;
@@ -254,11 +265,12 @@
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
+            animation: fadeIn 0.5s ease-out;
         }
 
         .file-download:hover {
             background: rgba(16,185,129,0.3);
-            transform: translateY(-2px);
+            transform: translateY(-2px) rotate(2deg);
         }
 
         .input-area {
@@ -267,12 +279,13 @@
             border-top: 1px solid var(--border);
             display: flex;
             gap: 1rem;
+            animation: slideUp 1s ease-out;
         }
 
         input[type="text"] {
             flex: 1;
             padding: 1rem 1.4rem;
-            background: #0f172a;
+            background: #fff7e6;
             border: 1px solid var(--border);
             color: var(--text);
             border-radius: 14px;
@@ -283,12 +296,13 @@
         input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(99,102,241,0.25);
+            box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.3);
+            animation: inputGlow 1s infinite alternate;
         }
 
         button.primary {
             padding: 1rem 2.2rem;
-            background: linear-gradient(135deg, var(--accent), #7c3aed);
+            background: linear-gradient(135deg, var(--accent), #fecaca);
             color: white;
             border: none;
             border-radius: 14px;
@@ -298,8 +312,16 @@
         }
 
         button.primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(99,102,241,0.45);
+            transform: translateY(-3px) scale(1.03) rotate(-2deg);
+            box-shadow: 0 12px 30px rgba(251, 146, 60, 0.45);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            animation: fadeIn 2s ease-out 1s forwards;
         }
 
         @keyframes fadeIn {
@@ -308,8 +330,70 @@
         }
 
         @keyframes slideIn {
-            from { opacity: 0; transform: translateY(25px); }
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-50px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 5px var(--glow); }
+            100% { text-shadow: 0 0 15px var(--glow); }
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0%; }
+            100% { background-position: 200%; }
+        }
+
+        @keyframes floatUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes expandIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes inputGlow {
+            0% { box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.3); }
+            100% { box-shadow: 0 0 0 6px rgba(251, 146, 60, 0.5); }
         }
 
         @media (max-width: 768px) {
@@ -319,7 +403,7 @@
         }
     </style>
 </head>
-<body data-theme="dark">
+<body data-theme="light"> <!-- Start with light for positive day vibe -->
 
     <div class="container">
         <!-- Home / Landing -->
@@ -327,22 +411,22 @@
             <header>
                 <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
-                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button> <!-- Start with sun for positive -->
                 </div>
             </header>
 
             <div class="hero">
                 <h1>Professional OSINT Platform</h1>
-                <p>Fast, discreet and powerful intelligence gathering using Telegram automation. Search phones, emails, usernames, IPs, VINs and more.</p>
+                <p>Fast, discreet and powerful intelligence gathering using Telegram automation. Search phones, emails, usernames, IPs, VINs and more. Feel the positive energy!</p>
 
                 <div class="features">
-                    <!-- You can keep or expand your features list here -->
                     <div class="feature">
                         <h3><i class="fas fa-phone"></i> Phone & Email</h3>
                         <ul>
                             <li>Owner info / linked accounts</li>
                             <li>Social media connections</li>
                             <li>Location history (where available)</li>
+                            <li>Positive vibe searches!</li>
                         </ul>
                     </div>
                     <div class="feature">
@@ -351,6 +435,7 @@
                             <li>Cross-platform lookup</li>
                             <li>Geolocation & ISP</li>
                             <li>Proxy / VPN detection</li>
+                            <li>Sunset geo maps!</li>
                         </ul>
                     </div>
                     <div class="feature">
@@ -359,12 +444,24 @@
                             <li>Registration details</li>
                             <li>History reports</li>
                             <li>Linked owners</li>
+                            <li>Drive into sunset data!</li>
+                        </ul>
+                    </div>
+                    <div class="feature">
+                        <h3><i class="fas fa-star"></i> New Positive Features</h3>
+                        <ul>
+                            <li>Daily motivation quotes</li>
+                            <li>Animated success confetti</li>
+                            <li>Custom sunset themes</li>
+                            <li>Export to PDF with vibes</li>
                         </ul>
                     </div>
                 </div>
 
-                <button id="startBtn" class="start-btn">Start Intelligence Session</button>
+                <button id="startBtn" class="start-btn">Start Positive Intelligence Session 🌅</button>
             </div>
+
+            <div class="footer">Developed by Tomar</div>
         </div>
 
         <!-- Chat Interface -->
@@ -372,29 +469,33 @@
             <header>
                 <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
-                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
                     <button id="resetBtn"><i class="fas fa-trash-can"></i> Clear Chat</button>
+                    <button id="exportBtn"><i class="fas fa-file-export"></i> Export</button> <!-- New feature: Export -->
+                    <button id="motivateBtn"><i class="fas fa-star"></i> Motivate</button> <!-- New feature: Motivation -->
                 </div>
             </header>
 
             <div class="chat-container">
                 <div class="chat-header">
-                    <span>Intelligence Feed</span>
-                    <span class="status" id="status">Ready</span>
+                    <span>Positive Intelligence Feed 🌞</span>
+                    <span class="status" id="status">Ready for Good Vibes!</span>
                 </div>
 
                 <div class="messages" id="messages"></div>
 
                 <div class="input-area">
-                    <input type="text" id="text" placeholder="Enter phone, email, username, IP, VIN..." autocomplete="off">
+                    <input type="text" id="text" placeholder="Enter phone, email, username, IP, VIN... with positive intent 🌅" autocomplete="off">
                     <button id="sendBtn" class="primary"><i class="fas fa-paper-plane"></i> Search</button>
                 </div>
             </div>
+
+            <div class="footer">Developed by Tomar</div>
         </div>
     </div>
 
     <script>
-        // Theme toggle
+        // Theme toggle (now starts light for positive)
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.onclick = () => {
             const current = document.body.dataset.theme;
@@ -409,11 +510,13 @@
         const input = document.getElementById('text');
         const sendBtn = document.getElementById('sendBtn');
         const status = document.getElementById('status');
+        const exportBtn = document.getElementById('exportBtn');
+        const motivateBtn = document.getElementById('motivateBtn');
 
         let allMessages = [];
         let pollingInterval = null;
 
-        // Add message to UI
+        // Add message with animation
         function addMessage(sender, time, text, file_path = null) {
             const div = document.createElement('div');
             div.className = `message ${sender === 'You' ? 'sent' : 'received'}`;
@@ -430,9 +533,11 @@
             div.innerHTML = html;
             messagesDiv.appendChild(div);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            // Extra animation: confetti on success
+            if (sender === 'Bot') confettiEffect();
         }
 
-        // Send query
+        // Send query with animation
         async function sendMessage() {
             const text = input.value.trim();
             if (!text) return;
@@ -440,7 +545,7 @@
             const now = new Date().toLocaleString();
             addMessage("You", now, text);
 
-            status.textContent = "Searching...";
+            status.textContent = "Searching with Positive Energy... 🌅";
             status.style.color = "var(--accent)";
             input.value = "";
 
@@ -451,14 +556,14 @@
                     body: `text=${encodeURIComponent(text)}`
                 });
                 if (!res.ok) throw new Error();
-                status.textContent = "Done";
+                status.textContent = "Done! Good Vibes Achieved! 😊";
                 status.style.color = "var(--success)";
             } catch {
-                status.textContent = "Error";
+                status.textContent = "Oops, Stay Positive!";
                 status.style.color = "var(--danger)";
             }
             setTimeout(() => {
-                status.textContent = "Ready";
+                status.textContent = "Ready for Good Vibes!";
                 status.style.color = "var(--success)";
             }, 2200);
         }
@@ -468,7 +573,7 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Load new messages from backend (only called after start)
+        // Load messages
         async function loadMessages() {
             try {
                 const res = await fetch('/messages');
@@ -488,28 +593,83 @@
             }
         }
 
-        // Start session → begin polling
+        // Start session
         document.getElementById('startBtn').onclick = () => {
             document.getElementById('home').classList.add('hidden');
             document.getElementById('chat').classList.remove('hidden');
-            status.textContent = "Connected";
+            status.textContent = "Connected with Sunshine! 🌞";
             status.style.color = "var(--success)";
 
-            // Start polling only now
             loadMessages();
             pollingInterval = setInterval(loadMessages, 5000);
+            confettiEffect(); // Animation on start
         };
 
-        // Reset → only clear frontend
+        // Reset local
         document.getElementById('resetBtn').onclick = () => {
             if (!confirm("Clear current chat? (only this browser)")) return;
 
             allMessages = [];
             messagesDiv.innerHTML = '';
-            addMessage("System", new Date().toLocaleString(), "Chat cleared locally.");
+            addMessage("System", new Date().toLocaleString(), "Chat cleared with positive reset! 🌅");
         };
 
-        // Optional: stop polling when page is hidden (save resources)
+        // New feature: Export session
+        exportBtn.onclick = () => {
+            if (!allMessages.length) return alert("No data to export");
+            const content = allMessages.map(m => `[${m.time}] ${m.sender}: ${m.text}`).join('\n');
+            const blob = new Blob([content], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tomar_osint_positive_${Date.now()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            addMessage("System", new Date().toLocaleString(), "Session exported with good vibes! 📄");
+        };
+
+        // New feature: Motivate button
+        const motivations = [
+            "You got this! 🌅 Keep shining!",
+            "Positive vibes only! 😊",
+            "Sunset success ahead! 🌞",
+            "Believe and achieve! ✨",
+            "Good day, great results! 👍"
+        ];
+        motivateBtn.onclick = () => {
+            const randomMot = motivations[Math.floor(Math.random() * motivations.length)];
+            addMessage("Motivator", new Date().toLocaleString(), randomMot);
+            confettiEffect();
+        };
+
+        // Simple confetti animation (pure JS)
+        function confettiEffect() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = `hsl(${Math.random()*360}, 100%, 50%)`;
+                confetti.style.left = `${Math.random()*100}vw`;
+                confetti.style.top = `${Math.random()*100}vh`;
+                confetti.style.opacity = '0.8';
+                confetti.style.pointerEvents = 'none';
+                confetti.style.animation = 'confettiFall 2s linear forwards';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2000);
+            }
+        }
+
+        // Confetti keyframes
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes confettiFall {
+                to { transform: translateY(100vh) rotate(${Math.random()*360}deg); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Pause polling when hidden
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && pollingInterval) {
                 clearInterval(pollingInterval);

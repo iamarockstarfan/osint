@@ -7,19 +7,19 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #fff7e6; /* Warm yellowish background */
-            --card: #ffe4e1; /* Soft pinkish card */
-            --text: #4a1a00; /* Dark warm text for contrast */
-            --accent: #fdba74; /* Yellowish-orange sunset accent */
-            --accent-hover: #fb923c; /* Deeper orange hover */
-            --success: #34d399; /* Positive green */
+            --bg: #fff7e6;
+            --card: #ffe4e1;
+            --text: #4a1a00;
+            --accent: #fdba74;
+            --accent-hover: #fb923c;
+            --success: #34d399;
             --danger: #ef4444;
-            --border: #fed7aa; /* Soft orange border */
-            --glow: rgba(253, 186, 116, 0.45); /* Warm glow */
-            --shadow: 0 10px 30px rgba(251, 146, 60, 0.3); /* Sunset shadow */
+            --border: #fed7aa;
+            --glow: rgba(253, 186, 116, 0.45);
+            --shadow: 0 10px 30px rgba(251, 146, 60, 0.3);
         }
         [data-theme="dark"] {
-            --bg: #1e0400; /* Deep sunset dark */
+            --bg: #1e0400;
             --card: #3b0a00;
             --text: #ffdab9;
             --accent: #fdba74;
@@ -37,11 +37,7 @@
             line-height: 1.6;
             transition: background 0.4s ease, color 0.4s ease;
         }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 1.5rem 1rem;
-        }
+        .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem; }
         header {
             display: flex;
             justify-content: space-between;
@@ -58,7 +54,6 @@
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
             animation: pulseGlow 2s infinite alternate;
         }
         .controls button {
@@ -70,18 +65,14 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-left: 0.9rem;
-            font-size: 1rem;
         }
         .controls button:hover {
             background: var(--accent);
             color: white;
-            border-color: var(--accent);
             transform: translateY(-2px) rotate(3deg);
             box-shadow: var(--shadow);
         }
-        .home, .chat {
-            animation: fadeIn 1.2s ease-out, bounceIn 0.8s ease-out;
-        }
+        .home, .chat { animation: fadeIn 1.2s ease-out, bounceIn 0.8s ease-out; }
         .home.hidden, .chat.hidden { display: none; }
         .hero {
             text-align: center;
@@ -90,26 +81,18 @@
             border-radius: 20px;
             border: 1px solid var(--border);
             box-shadow: var(--shadow);
-            margin-bottom: 3rem;
             animation: floatUp 1.5s ease-out;
         }
         .hero h1 {
             font-size: 3.5rem;
             margin-bottom: 1.2rem;
-            font-weight: 800;
             background: linear-gradient(90deg, var(--accent), #fecaca);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: textShine 3s infinite linear;
         }
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 720px;
-            margin: 0 auto 2.5rem;
-            opacity: 0.9;
-            animation: fadeIn 1.5s ease-out 0.5s forwards;
-        }
+        .hero p { font-size: 1.25rem; max-width: 720px; margin: 0 auto 2.5rem; opacity: 0.9; }
         .features {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -122,34 +105,15 @@
             border-radius: 16px;
             padding: 2rem;
             transition: all 0.4s ease;
-            animation: scaleIn 1s ease-out;
         }
         .feature:hover {
             transform: translateY(-10px) rotate(2deg);
-            box-shadow: 0 20px 40px rgba(251, 146, 60, 0.4), 0 0 0 2px var(--glow);
+            box-shadow: var(--shadow), 0 0 0 2px var(--glow);
         }
-        .feature h3 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        .feature ul {
-            list-style: none;
-            font-size: 1.05rem;
-        }
-        .feature li {
-            margin-bottom: 0.8rem;
-            position: relative;
-            padding-left: 1.8rem;
-            animation: slideLeft 0.8s ease-out forwards;
-        }
-        .feature li::before {
-            content: "🌅"; /* Sunset emoji for positive vibe */
-            position: absolute;
-            left: 0;
-            color: var(--accent);
-            font-weight: bold;
-        }
+        .feature h3 { color: var(--accent); margin-bottom: 1rem; font-size: 1.5rem; }
+        .feature ul { list-style: none; font-size: 1.05rem; }
+        .feature li { margin-bottom: 0.8rem; position: relative; padding-left: 1.8rem; }
+        .feature li::before { content: "🌅"; position: absolute; left: 0; color: var(--accent); }
         .start-btn {
             display: block;
             width: fit-content;
@@ -162,38 +126,21 @@
             border: none;
             border-radius: 16px;
             cursor: pointer;
-            transition: all 0.35s ease;
-            box-shadow: 0 10px 30px rgba(251, 146, 60, 0.4);
+            box-shadow: var(--shadow);
             animation: bounce 1.5s infinite;
         }
-        .start-btn:hover {
-            transform: translateY(-5px) scale(1.05) rotate(1deg);
-            box-shadow: 0 20px 50px rgba(251, 146, 60, 0.5);
-        }
-        .chat {
-            background: var(--card);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-            animation: expandIn 1s ease-out;
-        }
+        .start-btn:hover { transform: translateY(-5px) scale(1.05); box-shadow: 0 20px 50px rgba(251,146,60,0.5); }
+        .chat { background: var(--card); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); }
         .chat-header {
             padding: 1.2rem 2rem;
-            background: rgba(251, 146, 60, 0.1);
+            background: rgba(251,146,60,0.1);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-weight: 600;
             font-size: 1.1rem;
-            animation: fadeIn 1s ease-out;
         }
-        .status {
-            color: var(--success);
-            font-weight: 500;
-            animation: pulse 2s infinite;
-        }
+        .status { color: var(--success); animation: pulse 2s infinite; }
         .messages {
             padding: 2rem;
             height: 65vh;
@@ -206,40 +153,33 @@
             max-width: 82%;
             padding: 1rem 1.4rem;
             border-radius: 18px;
-            animation: slideIn 0.6s ease-out, bounceIn 0.4s ease-out;
+            animation: slideIn 0.6s ease-out;
             line-height: 1.5;
-            box-shadow: 0 2px 8px rgba(251, 146, 60, 0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
         .sent {
             background: linear-gradient(135deg, var(--accent), #fecaca);
             color: white;
             margin-left: auto;
-            border-bottom-right-radius: 6px;
         }
-        .received {
-            background: #fff7e6;
-            border: 1px solid var(--border);
-            margin-right: auto;
-            border-bottom-left-radius: 6px;
-        }
+        .received { background: #fffaf0; border: 1px solid var(--border); margin-right: auto; }
         .file-download {
             margin-top: 0.9rem;
             display: inline-flex;
             align-items: center;
             gap: 0.7rem;
-            padding: 0.7rem 1.4rem;
-            background: rgba(16,185,129,0.18);
-            border: 1px solid rgba(16,185,129,0.45);
+            padding: 0.8rem 1.5rem;
+            background: rgba(16,185,129,0.2);
+            border: 1px solid #10b981;
             color: #10b981;
             border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
             transition: all 0.3s;
-            animation: fadeIn 0.5s ease-out;
         }
         .file-download:hover {
-            background: rgba(16,185,129,0.3);
-            transform: translateY(-2px) rotate(2deg);
+            background: rgba(16,185,129,0.35);
+            transform: translateY(-2px);
         }
         .input-area {
             padding: 1.2rem 2rem;
@@ -247,7 +187,6 @@
             border-top: 1px solid var(--border);
             display: flex;
             gap: 1rem;
-            animation: slideUp 1s ease-out;
         }
         input[type="text"] {
             flex: 1;
@@ -257,13 +196,10 @@
             color: var(--text);
             border-radius: 14px;
             font-size: 1.05rem;
-            transition: all 0.3s;
         }
         input:focus {
-            outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.3);
-            animation: inputGlow 1s infinite alternate;
+            box-shadow: 0 0 0 4px rgba(253,186,116,0.3);
         }
         button.primary {
             padding: 1rem 2.2rem;
@@ -273,148 +209,47 @@
             border-radius: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.35s;
         }
-        button.primary:hover {
-            transform: translateY(-3px) scale(1.03) rotate(-2deg);
-            box-shadow: 0 12px 30px rgba(251, 146, 60, 0.45);
-        }
-        .footer {
-            text-align: center;
-            margin-top: 2rem;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            animation: fadeIn 2s ease-out 1s forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideLeft {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes bounceIn {
-            0% { transform: scale(0.9); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-        @keyframes pulseGlow {
-            0% { text-shadow: 0 0 5px var(--glow); }
-            100% { text-shadow: 0 0 15px var(--glow); }
-        }
-        @keyframes textShine {
-            0% { background-position: 0%; }
-            100% { background-position: 200%; }
-        }
-        @keyframes floatUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes expandIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes scaleIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
-        }
-        @keyframes inputGlow {
-            0% { box-shadow: 0 0 0 4px rgba(251, 146, 60, 0.3); }
-            100% { box-shadow: 0 0 0 6px rgba(251, 146, 60, 0.5); }
-        }
-        @media (max-width: 768px) {
-            .hero { padding: 5rem 1rem 3.5rem; }
-            .hero h1 { font-size: 2.8rem; }
-            .start-btn { padding: 1rem 2.8rem; font-size: 1.2rem; }
-        }
+        button.primary:hover { transform: scale(1.04); box-shadow: 0 10px 25px rgba(251,146,60,0.4); }
+        .footer { text-align: center; margin-top: 2rem; font-size: 0.9rem; opacity: 0.8; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.8rem; } .messages { height: 55vh; } }
     </style>
 </head>
-<body data-theme="light"> <!-- Start with light for positive day vibe -->
+<body data-theme="light">
     <div class="container">
-        <!-- Home / Landing -->
         <div class="home" id="home">
             <header>
                 <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
-                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button> <!-- Start with sun for positive -->
+                    <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
                 </div>
             </header>
             <div class="hero">
                 <h1>Professional OSINT Platform</h1>
                 <p>Fast, discreet and powerful intelligence gathering using Telegram automation. Search phones, emails, usernames, IPs, VINs and more. Feel the positive energy!</p>
                 <div class="features">
-                    <div class="feature">
-                        <h3><i class="fas fa-phone"></i> Phone & Email</h3>
-                        <ul>
-                            <li>Owner info / linked accounts</li>
-                            <li>Social media connections</li>
-                            <li>Location history (where available)</li>
-                            <li>Positive vibe searches!</li>
-                        </ul>
-                    </div>
-                    <div class="feature">
-                        <h3><i class="fas fa-user"></i> Username & IP</h3>
-                        <ul>
-                            <li>Cross-platform lookup</li>
-                            <li>Geolocation & ISP</li>
-                            <li>Proxy / VPN detection</li>
-                            <li>Sunset geo maps!</li>
-                        </ul>
-                    </div>
-                    <div class="feature">
-                        <h3><i class="fas fa-car"></i> Vehicle & VIN</h3>
-                        <ul>
-                            <li>Registration details</li>
-                            <li>History reports</li>
-                            <li>Linked owners</li>
-                            <li>Drive into sunset data!</li>
-                        </ul>
-                    </div>
-                    <div class="feature">
-                        <h3><i class="fas fa-star"></i> New Positive Features</h3>
-                        <ul>
-                            <li>Daily motivation quotes</li>
-                            <li>Animated success confetti</li>
-                            <li>Custom sunset themes</li>
-                            <li>Export to PDF with vibes</li>
-                        </ul>
-                    </div>
+                    <div class="feature"><h3><i class="fas fa-phone"></i> Phone & Email</h3><ul><li>Owner info / linked accounts</li><li>Social media connections</li><li>Location history</li><li>Positive vibe searches!</li></ul></div>
+                    <div class="feature"><h3><i class="fas fa-user"></i> Username & IP</h3><ul><li>Cross-platform lookup</li><li>Geolocation & ISP</li><li>Proxy / VPN detection</li><li>Sunset geo maps!</li></ul></div>
+                    <div class="feature"><h3><i class="fas fa-car"></i> Vehicle & VIN</h3><ul><li>Registration details</li><li>History reports</li><li>Linked owners</li><li>Drive into sunset data!</li></ul></div>
+                    <div class="feature"><h3><i class="fas fa-star"></i> New Positive Features</h3><ul><li>Daily motivation quotes</li><li>Animated success confetti</li><li>Custom sunset themes</li><li>Export with vibes</li></ul></div>
                 </div>
                 <button id="startBtn" class="start-btn">Start Positive Intelligence Session 🌅</button>
             </div>
             <div class="footer">Developed by Tomar</div>
         </div>
-        <!-- Chat Interface -->
+
         <div class="chat hidden" id="chat">
             <header>
                 <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
                     <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
                     <button id="resetBtn"><i class="fas fa-trash-can"></i> Clear Chat</button>
-                    <button id="exportBtn"><i class="fas fa-file-export"></i> Export</button> <!-- New feature: Export -->
-                    <button id="motivateBtn"><i class="fas fa-star"></i> Motivate</button> <!-- New feature: Motivation -->
+                    <button id="exportBtn"><i class="fas fa-file-export"></i> Export</button>
+                    <button id="motivateBtn"><i class="fas fa-star"></i> Motivate</button>
                 </div>
             </header>
             <div class="chat-container">
@@ -433,17 +268,13 @@
     </div>
 
     <script>
-        // Theme toggle (now starts light for positive)
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.onclick = () => {
             const current = document.body.dataset.theme;
             document.body.dataset.theme = current === 'light' ? 'dark' : 'light';
-            themeToggle.innerHTML = current === 'light'
-                ? '<i class="fas fa-moon"></i>'
-                : '<i class="fas fa-sun"></i>';
+            themeToggle.innerHTML = current === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
         };
 
-        // Elements
         const messagesDiv = document.getElementById('messages');
         const input = document.getElementById('text');
         const sendBtn = document.getElementById('sendBtn');
@@ -453,29 +284,34 @@
 
         let allMessages = [];
         let pollingInterval = null;
-        const CLEARED_KEY = 'tomar_osint_chat_cleared';  // sessionStorage flag
 
-        // Add message with animation
         function addMessage(sender, time, text, file_path = null) {
             const div = document.createElement('div');
             div.className = `message ${sender === 'You' ? 'sent' : 'received'}`;
             let html = `<small>${time} • ${sender}</small><br>${text.replace(/\n/g, '<br>')}`;
+
+            // Show download link if file_path exists
             if (file_path) {
                 html += `
-                    <a href="/file/${encodeURIComponent(file_path)}"
+                    <a href="/file/${encodeURIComponent(file_path)}" 
                        download="${file_path}"
                        class="file-download">
                         <i class="fas fa-download"></i> Download ${file_path}
                     </a>
                 `;
+            } 
+            // Fallback message if file is mentioned in text but no direct link
+            else if (text.includes('[FILE') || text.includes('downloaded_') || text.includes('.html') || text.includes('.txt')) {
+                html += '<div style="margin-top:10px; color:var(--accent); font-weight:600;">File available — check download section or refresh</div>';
             }
+
             div.innerHTML = html;
             messagesDiv.appendChild(div);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
             if (sender === 'Bot') confettiEffect();
         }
 
-        // Send query with animation
         async function sendMessage() {
             const text = input.value.trim();
             if (!text) return;
@@ -504,17 +340,9 @@
         }
 
         sendBtn.onclick = sendMessage;
-        input.addEventListener('keypress', e => {
-            if (e.key === 'Enter') sendMessage();
-        });
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
 
-        // Load messages – but skip if chat was cleared in this session
         async function loadMessages() {
-            // Important: do NOT load anything if cleared in this tab/session
-            if (sessionStorage.getItem(CLEARED_KEY) === 'true') {
-                return;
-            }
-
             try {
                 const res = await fetch('/messages');
                 const data = await res.json();
@@ -532,46 +360,36 @@
             }
         }
 
-        // Start session
         document.getElementById('startBtn').onclick = () => {
             document.getElementById('home').classList.add('hidden');
             document.getElementById('chat').classList.remove('hidden');
             status.textContent = "Connected with Sunshine! 🌞";
             status.style.color = "var(--success)";
-
-            // Only poll if not cleared in this session
-            if (sessionStorage.getItem(CLEARED_KEY) !== 'true') {
-                loadMessages();
-                pollingInterval = setInterval(loadMessages, 5000);
-            }
+            loadMessages();
+            pollingInterval = setInterval(loadMessages, 5000);
             confettiEffect();
         };
 
-        // Reset: clear frontend + block future loading of old messages in this tab
-        document.getElementById('resetBtn').onclick = () => {
-            if (!confirm("Clear current chat? (only this browser)")) return;
-
-            // Stop polling
+        document.getElementById('resetBtn').onclick = async () => {
+            if (!confirm("Clear chat completely? This removes everything.")) return;
             if (pollingInterval) {
                 clearInterval(pollingInterval);
                 pollingInterval = null;
             }
-
-            // Clear display and local array
             allMessages = [];
             messagesDiv.innerHTML = '';
-
-            // Mark session as cleared → prevents old messages from coming back
-            sessionStorage.setItem(CLEARED_KEY, 'true');
-
-            // Show confirmation
-            addMessage("System", new Date().toLocaleString(), "Chat cleared with positive reset! 🌅 Fresh start in this tab.");
-
-            // Optional: you can leave polling off, or restart it empty
-            // setTimeout(() => { loadMessages(); pollingInterval = setInterval(loadMessages, 5000); }, 1000);
+            try {
+                await fetch('/clear', { method: 'POST' });
+            } catch (err) {
+                console.warn("Server clear failed:", err);
+            }
+            addMessage("System", new Date().toLocaleString(), "Chat fully cleared – fresh start! 🌅");
+            setTimeout(() => {
+                loadMessages();
+                pollingInterval = setInterval(loadMessages, 5000);
+            }, 800);
         };
 
-        // Export session
         exportBtn.onclick = () => {
             if (!allMessages.length) return alert("No data to export");
             const content = allMessages.map(m => `[${m.time}] ${m.sender}: ${m.text}`).join('\n');
@@ -579,13 +397,12 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `tomar_osint_positive_${Date.now()}.txt`;
+            a.download = `tomar_osint_${Date.now()}.txt`;
             a.click();
             URL.revokeObjectURL(url);
             addMessage("System", new Date().toLocaleString(), "Session exported with good vibes! 📄");
         };
 
-        // Motivate button
         const motivations = [
             "You got this! 🌅 Keep shining!",
             "Positive vibes only! 😊",
@@ -599,7 +416,6 @@
             confettiEffect();
         };
 
-        // Simple confetti animation
         function confettiEffect() {
             for (let i = 0; i < 50; i++) {
                 const confetti = document.createElement('div');
@@ -617,25 +433,16 @@
             }
         }
 
-        // Confetti keyframes
         const style = document.createElement('style');
-        style.innerHTML = `
-            @keyframes confettiFall {
-                to { transform: translateY(100vh) rotate(${Math.random()*360}deg); opacity: 0; }
-            }
-        `;
+        style.innerHTML = `@keyframes confettiFall { to { transform: translateY(100vh) rotate(${Math.random()*360}deg); opacity: 0; } }`;
         document.head.appendChild(style);
 
-        // Pause/resume polling when tab is hidden/visible
         document.addEventListener('visibilitychange', () => {
             if (document.hidden && pollingInterval) {
                 clearInterval(pollingInterval);
                 pollingInterval = null;
             } else if (!document.hidden && !pollingInterval && !document.getElementById('home').classList.contains('hidden')) {
-                // Only restart if not cleared
-                if (sessionStorage.getItem(CLEARED_KEY) !== 'true') {
-                    pollingInterval = setInterval(loadMessages, 5000);
-                }
+                pollingInterval = setInterval(loadMessages, 5000);
             }
         });
     </script>

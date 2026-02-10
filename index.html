@@ -34,14 +34,9 @@
             color: var(--text);
             font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
-            transition: background 0.5s ease, color 0.5s ease;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 24px 16px;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
 
         header {
             display: flex;
@@ -76,13 +71,9 @@
             background: var(--accent);
             color: white;
             border-color: var(--accent);
-            transform: translateY(-1px);
         }
 
-        .home, .chat {
-            animation: fadeIn 0.8s ease-out;
-        }
-
+        .home, .chat { animation: fadeIn 0.8s ease-out; }
         .home.hidden, .chat.hidden { display: none; }
 
         .hero {
@@ -103,13 +94,7 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 40px;
-            opacity: 0.9;
-            line-height: 1.6;
-        }
+        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto 40px; opacity: 0.9; line-height: 1.6; }
 
         .features {
             display: grid;
@@ -131,17 +116,9 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px var(--glow);
         }
 
-        .feature h3 {
-            color: var(--accent);
-            margin-bottom: 16px;
-            font-size: 1.4rem;
-        }
+        .feature h3 { color: var(--accent); margin-bottom: 16px; font-size: 1.4rem; }
 
-        .feature ul {
-            list-style: none;
-            font-size: 1rem;
-            line-height: 1.8;
-        }
+        .feature ul { list-style: none; font-size: 1rem; line-height: 1.8; }
 
         .feature li {
             margin-bottom: 8px;
@@ -281,9 +258,7 @@
             cursor: pointer;
         }
 
-        button.primary:hover {
-            background: var(--accent-hover);
-        }
+        button.primary:hover { background: var(--accent-hover); }
 
         .pagination {
             padding: 16px 24px;
@@ -313,112 +288,75 @@
         <div class="home" id="home">
             <header>
                 <div class="logo">TOMAR OSINT</div>
-                <div>
+                <div class="controls">
                     <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
                 </div>
             </header>
 
             <div class="hero">
-                <h1>Advanced Open-Source Intelligence Platform</h1>
-                <p>
-                    TOMAR OSINT provides fast, ethical, and powerful access to publicly available information from multiple sources. Designed for researchers, investigators, journalists, and security professionals.
-                </p>
+                <h1>Advanced Open-Source Intelligence</h1>
+                <p>Professional-grade OSINT tool powered by Telegram bots. Search phones, emails, usernames, vehicles, IPs and more — fast and discreet.</p>
 
-                <button class="start-btn" id="startBtn">
-                    <i class="fas fa-search"></i> Start Intelligence Gathering
-                </button>
-            </div>
+                <div class="features">
+                    <div class="feature">
+                        <h3><i class="fas fa-phone"></i> Phone / Email</h3>
+                        <ul>
+                            <li>+40712345678 (RO)</li>
+                            <li>ivan.petrov@gmail.com</li>
+                            <li>Full name leak check</li>
+                        </ul>
+                    </div>
 
-            <div class="features">
-                <div class="feature">
-                    <h3><i class="fas fa-envelope"></i> Email Search</h3>
-                    <ul>
-                        <li>example@gmail.com</li>
-                        <li>example@ (any domain)</li>
-                        <li>@gmail.com (domain only)</li>
-                    </ul>
+                    <div class="feature">
+                        <h3><i class="fas fa-car"></i> Vehicle Search</h3>
+                        <ul>
+                            <li>O999МУ777 (Russia)</li>
+                            <li>ВО4561АХ</li>
+                            <li>XTA21150053965897 (VIN)</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature">
+                        <h3><i class="fab fa-telegram-plane"></i> Telegram Account</h3>
+                        <ul>
+                            <li>@username</li>
+                            <li>314159265 (ID)</li>
+                            <li>Full name / bio / photo</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature">
+                        <h3><i class="fas fa-map-marker-alt"></i> IP / Geo</h3>
+                        <ul>
+                            <li>185.XX.XX.XX</li>
+                            <li>City / ISP / Proxy check</li>
+                        </ul>
+                    </div>
+
+                    <div class="feature">
+                        <h3><i class="fas fa-file-lines"></i> Mass Search</h3>
+                        <p>Upload .txt file with one query per line (phones, emails, usernames, etc.)</p>
+                    </div>
                 </div>
 
-                <div class="feature">
-                    <h3><i class="fas fa-user"></i> Name / Nickname</h3>
-                    <ul>
-                        <li>Petrov</li>
-                        <li>Petrov Maxim</li>
-                        <li>Petrov Maxim Sergeevich</li>
-                        <li>ShadowPlayer228</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fas fa-phone"></i> Phone Number</h3>
-                    <ul>
-                        <li>+79002206090</li>
-                        <li>79002206090</li>
-                        <li>89002206090</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fas fa-key"></i> Password Search</h3>
-                    <ul>
-                        <li>123qwe</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fas fa-car"></i> Vehicle Search</h3>
-                    <ul>
-                        <li>O999МУ777 (Russia)</li>
-                        <li>ВО4561АХ (Criminal Code)</li>
-                        <li>XTA21150053965897 (VIN)</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fab fa-telegram-plane"></i> Telegram Account</h3>
-                    <ul>
-                        <li>Petrov Ivan</li>
-                        <li>314159265 (ID)</li>
-                        <li>@Petivan (username)</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fab fa-vk"></i> VK / Facebook / Instagram</h3>
-                    <ul>
-                        <li>Name Surname</li>
-                        <li>User ID</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fas fa-map-marker-alt"></i> IP Address</h3>
-                    <ul>
-                        <li>127.0.0.1</li>
-                    </ul>
-                </div>
-
-                <div class="feature">
-                    <h3><i class="fas fa-file-lines"></i> Mass Search (File)</h3>
-                    <p>Upload UTF-8 file with one query per line. Supports mixed formats.</p>
-                </div>
+                <button id="startBtn" class="start-btn">Start Intelligence Gathering</button>
             </div>
         </div>
 
-        <!-- Chat / Search Interface -->
+        <!-- Chat Interface -->
         <div class="chat hidden" id="chat">
             <header>
                 <div class="logo">TOMAR OSINT</div>
-                <div>
+                <div class="controls">
                     <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
-                    <button class="reset-btn" id="resetBtn"><i class="fas fa-trash-alt"></i> Reset Session</button>
+                    <button id="resetBtn"><i class="fas fa-trash-alt"></i> Reset</button>
                 </div>
             </header>
 
             <div class="chat-container">
                 <div class="chat-header">
                     <span>Live Intelligence Feed</span>
-                    <span class="status" id="status">Connected</span>
+                    <span class="status" id="status">Connecting...</span>
                 </div>
 
                 <div class="messages" id="messages"></div>
@@ -429,54 +367,35 @@
                     <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
                 </div>
 
-                <button class="full-download" id="downloadBtn">
-                    <i class="fas fa-file-export"></i> Export Full Session Log
+                <button id="downloadBtn" style="margin: 16px auto; display: block; padding: 12px 24px; background: var(--success); color: white; border: none; border-radius: 8px; cursor: pointer;">
+                    <i class="fas fa-file-export"></i> Export Full Session
                 </button>
 
                 <div class="input-area">
-                    <input type="text" id="text" placeholder="Enter your query (email, phone, name, username, etc.)..." autocomplete="off">
-                    <button id="sendBtn"><i class="fas fa-paper-plane"></i> Search</button>
+                    <input type="text" id="text" placeholder="Enter phone, email, username, VIN, IP..." autocomplete="off">
+                    <button id="sendBtn" class="primary"><i class="fas fa-paper-plane"></i> Search</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Theme Toggle
+        // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.onclick = () => {
             const current = document.body.dataset.theme;
             document.body.dataset.theme = current === 'light' ? 'dark' : 'light';
-            themeToggle.innerHTML = current === 'light' 
-                ? '<i class="fas fa-moon"></i>' 
-                : '<i class="fas fa-sun"></i>';
+            themeToggle.innerHTML = current === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
         };
 
-        // Show chat page
+        // Show chat
         document.getElementById('startBtn').onclick = () => {
             document.getElementById('home').classList.add('hidden');
             document.getElementById('chat').classList.remove('hidden');
+            status.textContent = "Connected";
         };
 
-        // Reset session
-        document.getElementById('resetBtn').onclick = async () => {
-            if (confirm("Clear all messages and reset session?")) {
-                allMessages = [];
-                renderPage(1);
-                // Optional: tell backend to reset (if you have /reset command)
-                await fetch('/send', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                    body: 'text=/reset'
-                });
-            }
-        };
-
-        // ──────────────────────────────────────────────
-        // Your existing chat logic (paste your renderPage, loadMessages, etc. here)
-        // Example placeholder – replace with your real code
-        // ──────────────────────────────────────────────
-
+        // Elements
         const messagesDiv = document.getElementById('messages');
         const input = document.getElementById('text');
         const sendBtn = document.getElementById('sendBtn');
@@ -490,9 +409,32 @@
         let currentPage = 1;
         const messagesPerPage = 20;
 
+        // Add message to UI
+        function addMessage(sender, time, text, file_path = null) {
+            const div = document.createElement('div');
+            div.className = `message ${sender === 'You' ? 'sent' : 'received'}`;
+            let html = `<small>${time} • ${sender}</small><br>${text.replace(/\n/g, '<br>')}`;
+            if (file_path) {
+                html += `
+                    <a href="/file/${encodeURIComponent(file_path)}" 
+                       download="${file_path}"
+                       class="file-download">
+                        <i class="fas fa-download"></i> Download ${file_path}
+                    </a>
+                `;
+            }
+            div.innerHTML = html;
+            messagesDiv.appendChild(div);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Send query
         async function sendMessage() {
             const text = input.value.trim();
             if (!text) return;
+
+            const now = new Date().toLocaleString();
+            addMessage("You", now, text);
 
             status.textContent = "Searching...";
             input.value = "";
@@ -503,89 +445,99 @@
                     headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                     body: `text=${encodeURIComponent(text)}`
                 });
-
                 if (!res.ok) throw new Error();
                 status.textContent = "Done";
-                setTimeout(() => status.textContent = "Connected", 1000);
             } catch {
                 status.textContent = "Error";
                 status.style.color = "#ef4444";
             }
+            setTimeout(() => status.textContent = "Connected", 2000);
         }
 
         sendBtn.onclick = sendMessage;
-        input.addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
+        input.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
 
+        // Load messages from backend
         async function loadMessages() {
             try {
                 const res = await fetch('/messages');
                 const data = await res.json();
-                allMessages = data.messages || [];
-                renderPage(currentPage);
-            } catch {}
+                const serverMsgs = data.messages || [];
+
+                // Only add new messages (simple dedup by time+text prefix)
+                const existing = new Set(allMessages.map(m => m.time + m.text.slice(0,50)));
+                serverMsgs.forEach(msg => {
+                    const key = msg.time + msg.text.slice(0,50);
+                    if (!existing.has(key)) {
+                        allMessages.push(msg);
+                        addMessage(msg.sender, msg.time, msg.text, msg.file_path);
+                    }
+                });
+
+                renderPagination();
+            } catch {
+                console.log("Failed to load messages");
+            }
         }
+
+        function renderPagination() {
+            const total = Math.ceil(allMessages.length / messagesPerPage) || 1;
+            pageInfo.textContent = `Page ${currentPage} / ${total}`;
+            prevBtn.disabled = currentPage === 1;
+            nextBtn.disabled = currentPage >= total;
+        }
+
+        prevBtn.onclick = () => { if (currentPage > 1) currentPage--, renderPage(currentPage); };
+        nextBtn.onclick = () => { if (currentPage * messagesPerPage < allMessages.length) currentPage++, renderPage(currentPage); };
 
         function renderPage(page) {
-            // Your existing render logic goes here
-            // Make sure it includes the file download button
-            // Example:
-            currentPage = page;
             const start = (page - 1) * messagesPerPage;
             const end = start + messagesPerPage;
-            const msgs = allMessages.slice(start, end);
+            const pageMsgs = allMessages.slice(start, end);
 
             messagesDiv.innerHTML = '';
-
-            msgs.forEach(msg => {
-                const div = document.createElement('div');
-                div.className = `message ${msg.sender === 'You' ? 'sent' : 'received'}`;
-
-                let html = `
-                    <small>${msg.time} • ${msg.sender}</small>
-                    ${msg.text.replace(/\n/g, '<br>')}
-                `;
-
-                if (msg.file_path) {
-                    html += `
-                        <a href="/file/${encodeURIComponent(msg.file_path)}" 
-                           download="${msg.file_path}"
-                           class="file-download">
-                            <i class="fas fa-download"></i> Download ${msg.file_path}
-                        </a>
-                    `;
-                }
-
-                div.innerHTML = html;
-                messagesDiv.appendChild(div);
-            });
-
-            const total = Math.ceil(allMessages.length / messagesPerPage) || 1;
-            pageInfo.textContent = `Page ${page} / ${total}`;
-
-            prevBtn.disabled = page === 1;
-            nextBtn.disabled = page >= total;
-
+            pageMsgs.forEach(m => addMessage(m.sender, m.time, m.text, m.file_path));
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            renderPagination();
         }
 
-        prevBtn.onclick = () => currentPage > 1 && renderPage(currentPage - 1);
-        nextBtn.onclick = () => (currentPage * messagesPerPage < allMessages.length) && renderPage(currentPage + 1);
-
+        // Export log
         downloadBtn.onclick = () => {
             if (!allMessages.length) return alert("No data to export");
-            const txt = allMessages.map(m => `[${m.time}] ${m.sender}: ${m.text}`).join('\n');
-            const blob = new Blob([txt], {type: 'text/plain'});
+            const content = allMessages.map(m => `[${m.time}] ${m.sender}: ${m.text}`).join('\n');
+            const blob = new Blob([content], {type: 'text/plain'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `tomar_osint_export_${Date.now()}.txt`;
+            a.download = `tomar_osint_${Date.now()}.txt`;
             a.click();
             URL.revokeObjectURL(url);
         };
 
-        // Initial load + auto-refresh
+        // Reset
+        document.getElementById('resetBtn').onclick = async () => {
+            if (!confirm("Clear session?")) return;
+            allMessages = [];
+            messagesDiv.innerHTML = '';
+            currentPage = 1;
+            renderPagination();
+            await fetch('/send', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'text=/reset'
+            });
+        };
+
+        // Initial load + poll
         loadMessages();
         setInterval(loadMessages, 5000);
+
+        // Wake-up hint on slow start
+        setTimeout(() => {
+            if (allMessages.length === 0 && status.textContent === "Connecting...") {
+                status.textContent = "Free server waking up... (30-90s)";
+            }
+        }, 8000);
     </script>
 </body>
 </html>

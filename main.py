@@ -1,108 +1,179 @@
-from fastapi import FastAPI, Form, HTTPException
+from fastapi import FastAPI, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from pyrogram import Client, filters
+import os
 from dotenv import load_dotenv
 from datetime import datetime
 from pathlib import Path
 from io import BytesIO
-import os
 
-# Load .env locally (Railway ignores this, it's fine)
-load_dotenv()
+# Load .env only if running locally (on Render we use dashboard env vars)
+load_dotenv()  # safe to call even if no .env file exists
 
 app = FastAPI()
 
-# ───────────────── CONFIG ─────────────────
+# ──────────────────────────────────────────────
+# CONFIG – ALL SECRETS COME FROM ENVIRONMENT VARIABLES
+# ──────────────────────────────────────────────
+TARGET = "WeLeakInfo_BOT"  # the bot username you're interacting with
 
-TARGET = "WeLeakInfo_BOT"
+# These MUST be set in Render dashboard → Environment Variables
+API_ID = int(os.getenv("API_ID") or "0")                # will crash if missing → good for catching errors
+API_HASH = os.getenv("API_HASH") or ""
+SESSION_STRING = os.getenv("SESSION_STRING") or ""
 
-API_ID = int(os.getenv("API_ID", 0))
-API_HASH = os.getenv("API_HASH")
-SESSION_STRING = os.getenv("SESSION_STRING")
-
-DOWNLOAD_DIR = Path.home() / "BotFiles"
+# Use /tmp on Render (ephemeral filesystem – files disappear on restart/sleep)
+DOWNLOAD_DIR = Path("/tmp") / "BotFiles"
 DOWNLOAD_DIR.mkdir(exist_ok=True)
 
 client = None
-recent_messages = []
+recent_messages = []  # in-memory message history (lost on restart – fine for this use-case)
 
-# ─────────────── STARTUP ───────────────
-
+# ──────────────────────────────────────────────
+# STARTUP – Initialize Pyrogram client
+# ──────────────────────────────────────────────
 @app.on_event("startup")
 async def startup():
     global client
 
     if not API_ID or not API_HASH or not SESSION_STRING:
-        print("❌ Missing environment variables")
+        print("ERROR: Missing required environment variables!")
+        print("Please set in Render dashboard:")
+        print("  API_ID         (your Telegram API ID)")
+        print("  API_HASH       (your Telegram API hash)")
+        print("  SESSION_STRING (your Pyrogram session string)")
         return
 
-    client = Client(
-        "my_account",
-        api_id=API_ID,
-        api_hash=API_HASH,
-        session_string=SESSION_STRING
-    )
+    try:
+        client = Client(
+            name="tomar_osint_bot",
+            api_id=API_ID,
+            api_hash=API_HASH,
+            session_string=SESSION_STRING
+        )
 
-    await client.start()
-    print("✅ Telegram client started")
+        await client.start()
+        print("Telegram client started successfully ✓")
+        print(f"Connected to target: @{TARGET}")
+        print(f"Downloaded files will be saved temporarily to: {DOWNLOAD_DIR}")
 
-    @client.on_message(filters.chat(TARGET))
-    async def handle_message(c, message):
-        global recent_messages
+        # ──────────────────────────────────────────────
+        # MESSAGE HANDLER – only messages from the target bot
+        # ──────────────────────────────────────────────
+        @client.on_message(filters.chat(TARGET))
+        async def handle_message(c: Client, message):
+            global recent_messages
 
-        sender = "You" if message.outgoing else "Bot"
-        time_str = message.date.strftime("%Y-%m-%d %H:%M:%S")
-        text = message.text or message.caption or "[No text]"
-        file_saved = None
+            sender = "You" if message.outgoing else "Bot"
+            time_str = message.date.strftime("%Y-%m-%d %H:%M:%S")
+            text = message.text or message.caption or "[No text/content]"
+            file_saved = None
 
-        # Handle documents
-        if message.document:
-            file_obj = await message.download(in_memory=True)
-            if file_obj:
-                file_path = DOWNLOAD_DIR / message.document.file_name
-                file_path.write_bytes(file_obj.getvalue())
-                file_saved = file_path.name
-                text += f"\n[FILE SAVED: {file_saved}]"
+            # Auto-click useful buttons (download/export/get file/etc.)
+            if message.reply_markup and message.reply_markup.inline_keyboard:
+                for row in message.reply_markup.inline_keyboard:
+                    for btn in row:
+                        btn_text = (btn.text or "").lower()
+                        if any(word in btn_text for word in ["download", "export", "get file", "save", "txt", "html", "data"]):
+                            print(f"Found clickable button: {btn.text}")
+                            try:
+                                await message.click(btn.text)
+                                print("→ Button clicked successfully")
+                            except Exception as e:
+                                print(f"Button click failed: {e}")
 
-        recent_messages.append({
-            "sender": sender,
-            "text": text,
-            "time": time_str,
-            "file_path": file_saved
-        })
+            # Handle documents/files sent by the bot
+            if message.document:
+                orig_name = message.document.file_name or f"file_{message.id}"
+                mime = message.document.mime_type or ""
+                size_kb = message.document.file_size / 1024 if message.document.file_size else 0
+                print(f"Received document: {orig_name} | {size_kb:.1f} KB | mime: {mime}")
 
-        recent_messages[:] = recent_messages[-1000:]
+                # Choose filename (prefer .html/.txt for text content)
+                save_name = (
+                    f"downloaded_{message.id}.html"
+                    if "text" in mime.lower() or "html" in mime.lower() or orig_name.lower().endswith((".txt", ".html"))
+                    else orig_name
+                )
+                file_path = DOWNLOAD_DIR / save_name
 
-# ─────────────── ROUTES ───────────────
+                try:
+                    # Download to memory first (safer on free tier)
+                    file_obj = await message.download(in_memory=True)
+                    if file_obj and isinstance(file_obj, BytesIO):
+                        file_bytes = file_obj.getvalue()
+                        file_path.write_bytes(file_bytes)
+                        if file_path.exists():
+                            file_saved = file_path.name
+                            text += f"\n\n[FILE SAVED: {file_saved}] ({len(file_bytes)/1024:.1f} KB)"
+                            print(f"File saved: {file_path}")
+                        else:
+                            text += "\n[Disk write failed]"
+                    else:
+                        text += "\n[Download returned empty data]"
+                except Exception as e:
+                    text += f"\n[Download failed: {str(e)}]"
+                    print(f"Download error: {type(e).__name__}: {str(e)}")
 
+            # Store in memory (for frontend to display)
+            recent_messages.append({
+                "sender": sender,
+                "text": text,
+                "time": time_str,
+                "file_path": file_saved
+            })
+
+            # Keep only last 1000 messages (memory safety)
+            if len(recent_messages) > 1000:
+                recent_messages[:] = recent_messages[-1000:]
+
+            print(f"[{time_str}] {sender}: {text[:120]}{'...' if len(text)>120 else ''}")
+
+    except Exception as e:
+        print(f"Startup / client error: {str(e)}")
+
+
+# ──────────────────────────────────────────────
+# FASTAPI ROUTES
+# ──────────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
 async def home():
-    return "<h1>Backend running</h1>"
+    try:
+        with open("index.html", "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        return "<h1>Error: index.html not found in project root</h1>"
+
 
 @app.post("/send")
 async def send(text: str = Form(...)):
     if not client:
-        raise HTTPException(500, "Client not ready")
-    await client.send_message(TARGET, text)
-    return {"status": "ok"}
+        raise HTTPException(500, "Telegram client not initialized")
+    try:
+        await client.send_message(TARGET, text)
+        return {"status": "sent"}
+    except Exception as e:
+        raise HTTPException(500, f"Send failed: {str(e)}")
+
 
 @app.get("/messages")
-async def messages():
+async def get_messages():
     return {"messages": recent_messages}
 
+
 @app.get("/file/{filename}")
-async def file(filename: str):
+async def get_file(filename: str):
     file_path = DOWNLOAD_DIR / filename
     if not file_path.exists():
-        raise HTTPException(404)
-    return FileResponse(file_path)
-
-# ─────────────── RUN (BOTTOM ONLY) ───────────────
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8000))
+        raise HTTPException(404, "File not found (files are temporary on free hosting)")
+    return FileResponse(
+        path=file_path,
+        filename=filename,
+        media_type="application/octet-stream"
     )
+
+
+# Optional: health check endpoint (useful for cron pings)
+@app.get("/health")
+async def health():
+    return {"status": "ok", "client_running": bool(client)}

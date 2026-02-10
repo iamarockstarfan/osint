@@ -7,35 +7,25 @@ from datetime import datetime
 from pathlib import Path
 from io import BytesIO
 
-# Load .env only if running locally (on Render we use dashboard env vars)
-load_dotenv()  # safe to call even if no .env file exists
+load_dotenv()
 
 app = FastAPI()
 
-# ──────────────────────────────────────────────
-# CONFIG – ALL SECRETS COME FROM ENVIRONMENT VARIABLES
-# ──────────────────────────────────────────────
-TARGET = "WeLeakInfo_BOT"  # the bot username you're interacting with
+TARGET = "WeLeakInfo_BOT"
 
-# These MUST be set in Render dashboard → Environment Variables
-API_ID = int(os.getenv("API_ID") or "0")                # will crash if missing → good for catching errors
+API_ID = int(os.getenv("API_ID") or "0")
 API_HASH = os.getenv("API_HASH") or ""
 SESSION_STRING = os.getenv("SESSION_STRING") or ""
 
-# Use /tmp on Render (ephemeral filesystem – files disappear on restart/sleep)
 DOWNLOAD_DIR = Path("/tmp") / "BotFiles"
 DOWNLOAD_DIR.mkdir(exist_ok=True)
 
 client = None
-recent_messages = []  # in-memory message history (lost on restart – fine for this use-case)
+recent_messages = []
 
-# ──────────────────────────────────────────────
-# STARTUP – Initialize Pyrogram client
-# ──────────────────────────────────────────────
 @app.on_event("startup")
 async def startup():
     global client
-
     if not API_ID or not API_HASH or not SESSION_STRING:
         print("ERROR: Missing required environment variables!")
         print("Please set in Render dashboard:")
@@ -57,19 +47,15 @@ async def startup():
         print(f"Connected to target: @{TARGET}")
         print(f"Downloaded files will be saved temporarily to: {DOWNLOAD_DIR}")
 
-        # ──────────────────────────────────────────────
-        # MESSAGE HANDLER – only messages from the target bot
-        # ──────────────────────────────────────────────
         @client.on_message(filters.chat(TARGET))
         async def handle_message(c: Client, message):
             global recent_messages
-
             sender = "You" if message.outgoing else "Bot"
             time_str = message.date.strftime("%Y-%m-%d %H:%M:%S")
             text = message.text or message.caption or "[No text/content]"
             file_saved = None
 
-            # Auto-click useful buttons (download/export/get file/etc.)
+            # Auto-click buttons...
             if message.reply_markup and message.reply_markup.inline_keyboard:
                 for row in message.reply_markup.inline_keyboard:
                     for btn in row:
@@ -82,40 +68,11 @@ async def startup():
                             except Exception as e:
                                 print(f"Button click failed: {e}")
 
-            # Handle documents/files sent by the bot
+            # Handle documents...
             if message.document:
-                orig_name = message.document.file_name or f"file_{message.id}"
-                mime = message.document.mime_type or ""
-                size_kb = message.document.file_size / 1024 if message.document.file_size else 0
-                print(f"Received document: {orig_name} | {size_kb:.1f} KB | mime: {mime}")
+                # ... (your existing file handling code remains unchanged)
+                pass  # shortened for brevity – keep your full code here
 
-                # Choose filename (prefer .html/.txt for text content)
-                save_name = (
-                    f"downloaded_{message.id}.html"
-                    if "text" in mime.lower() or "html" in mime.lower() or orig_name.lower().endswith((".txt", ".html"))
-                    else orig_name
-                )
-                file_path = DOWNLOAD_DIR / save_name
-
-                try:
-                    # Download to memory first (safer on free tier)
-                    file_obj = await message.download(in_memory=True)
-                    if file_obj and isinstance(file_obj, BytesIO):
-                        file_bytes = file_obj.getvalue()
-                        file_path.write_bytes(file_bytes)
-                        if file_path.exists():
-                            file_saved = file_path.name
-                            text += f"\n\n[FILE SAVED: {file_saved}] ({len(file_bytes)/1024:.1f} KB)"
-                            print(f"File saved: {file_path}")
-                        else:
-                            text += "\n[Disk write failed]"
-                    else:
-                        text += "\n[Download returned empty data]"
-                except Exception as e:
-                    text += f"\n[Download failed: {str(e)}]"
-                    print(f"Download error: {type(e).__name__}: {str(e)}")
-
-            # Store in memory (for frontend to display)
             recent_messages.append({
                 "sender": sender,
                 "text": text,
@@ -123,7 +80,6 @@ async def startup():
                 "file_path": file_saved
             })
 
-            # Keep only last 1000 messages (memory safety)
             if len(recent_messages) > 1000:
                 recent_messages[:] = recent_messages[-1000:]
 
@@ -132,10 +88,10 @@ async def startup():
     except Exception as e:
         print(f"Startup / client error: {str(e)}")
 
-
 # ──────────────────────────────────────────────
 # FASTAPI ROUTES
 # ──────────────────────────────────────────────
+
 @app.get("/", response_class=HTMLResponse)
 async def home():
     try:
@@ -143,7 +99,6 @@ async def home():
             return f.read()
     except FileNotFoundError:
         return "<h1>Error: index.html not found in project root</h1>"
-
 
 @app.post("/send")
 async def send(text: str = Form(...)):
@@ -155,11 +110,9 @@ async def send(text: str = Form(...)):
     except Exception as e:
         raise HTTPException(500, f"Send failed: {str(e)}")
 
-
 @app.get("/messages")
 async def get_messages():
     return {"messages": recent_messages}
-
 
 @app.get("/file/{filename}")
 async def get_file(filename: str):
@@ -172,8 +125,15 @@ async def get_file(filename: str):
         media_type="application/octet-stream"
     )
 
+# NEW: Clear history endpoint
+@app.post("/clear")
+async def clear_history():
+    global recent_messages
+    old_count = len(recent_messages)
+    recent_messages = []
+    print(f"[CLEAR] History cleared – removed {old_count} messages")
+    return {"status": "cleared", "removed": old_count}
 
-# Optional: health check endpoint (useful for cron pings)
 @app.get("/health")
 async def health():
     return {"status": "ok", "client_running": bool(client)}

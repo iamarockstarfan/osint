@@ -40,29 +40,23 @@
         }
         .disabled {
             background: #000 !important;
-            color: #fff !important;
+            color: #f0f0f0 !important;
             position: fixed;
             inset: 0;
             z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.4rem;
+            font-weight: 600;
             text-align: center;
             padding: 2rem;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            letter-spacing: 1px;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem; position: relative; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; animation: slideDown 1s ease-out; }
-        .logo { 
-            font-size: 2.25rem; 
-            font-weight: 800; 
-            background: linear-gradient(90deg, var(--accent), #fecaca); 
-            -webkit-background-clip: text; 
-            background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            animation: pulseGlow 2s infinite alternate; 
-            cursor: pointer;  /* clickable for disable */
-        }
+        .logo { font-size: 2.25rem; font-weight: 800; background: linear-gradient(90deg, var(--accent), #fecaca); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: pulseGlow 2s infinite alternate; cursor: pointer; }
         .controls button { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 0.75rem 1.1rem; border-radius: 12px; cursor: pointer; transition: all 0.3s ease; margin-left: 0.9rem; }
         .controls button:hover { background: var(--accent); color: white; transform: translateY(-2px) rotate(3deg); box-shadow: var(--shadow); }
         .home, .chat { animation: fadeIn 1.2s ease-out, bounceIn 0.8s ease-out; }
@@ -95,69 +89,70 @@
         button.primary:hover { transform: scale(1.04); box-shadow: 0 10px 25px rgba(251,146,60,0.4); }
         .footer { text-align: center; margin-top: 2rem; font-size: 0.9rem; opacity: 0.8; }
         .unauthorized-alert { background: rgba(239,68,68,0.15); border: 2px solid var(--danger); color: var(--danger); padding: 1.5rem; margin: 1rem 0; border-radius: 12px; font-weight: bold; text-align: center; animation: pulse 1.5s infinite; }
-        /* Invisible lock area - only visible when needed, but no visual */
+        /* Invisible lock area – completely hidden but clickable */
         #auth-lock {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 80px;
-            height: 80px;
-            background: transparent; /* completely invisible */
+            width: 100px;
+            height: 100px;
+            background: transparent;
             cursor: pointer;
             z-index: 9999;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.4s ease;
         }
-        #auth-lock.visible {
-            opacity: 1;
-            visibility: visible;
-        }
+        #auth-lock.visible { visibility: visible; opacity: 1; }
         /* Password prompt */
         #password-prompt {
             position: fixed;
-            bottom: 110px;
+            bottom: 130px;
             right: 20px;
             background: var(--card);
             border: 2px solid var(--accent);
             border-radius: 12px;
-            padding: 1rem;
-            width: 280px;
+            padding: 1.2rem;
+            width: 300px;
             box-shadow: var(--shadow);
             display: none;
             z-index: 9999;
         }
         #password-prompt input {
             width: 100%;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
+            padding: 0.9rem;
+            margin: 0.6rem 0;
             border: 1px solid var(--border);
             border-radius: 8px;
             font-size: 1.1rem;
         }
         #password-prompt button {
             width: 100%;
-            padding: 0.8rem;
+            padding: 0.9rem;
             background: var(--accent);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
         }
         #password-prompt button:hover { background: var(--accent-hover); }
-        #password-error { color: var(--danger); margin-top: 8px; display:none; }
+        #password-error { color: var(--danger); margin-top: 10px; display:none; font-weight: 600; }
         .disabled {
             background: #000 !important;
-            color: #fff !important;
+            color: #f0f0f0 !important;
             position: fixed;
             inset: 0;
             z-index: 99999;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 2.6rem;
+            font-weight: 700;
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
+            text-shadow: 0 0 30px rgba(255,255,255,0.15);
+            letter-spacing: 1.5px;
         }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -215,18 +210,18 @@
             <div class="footer">Developed by Tomar</div>
         </div>
 
-        <!-- Invisible lock area (clickable but completely hidden until needed) -->
+        <!-- Invisible lock area (always present but transparent & hidden until needed) -->
         <div id="auth-lock"></div>
 
         <!-- Password prompt -->
         <div id="password-prompt">
-            <h3 style="margin:0 0 10px; color:var(--accent);">Enter Password</h3>
+            <h3 style="margin:0 0 12px; color:var(--accent);">Enter Password</h3>
             <input type="password" id="password-input" placeholder="Enter password">
             <button id="password-submit">Unlock</button>
-            <p id="password-error" style="color:var(--danger); margin-top:8px; display:none;">Wrong password – try again</p>
+            <p id="password-error" style="color:var(--danger); margin-top:10px; display:none;">Wrong password – try again</p>
         </div>
 
-        <!-- Disable overlay -->
+        <!-- Disable overlay (nicer black screen) -->
         <div id="disable-overlay" class="disabled" style="display:none;">
             This website has been disabled by the creator for security reasons.
         </div>
@@ -462,13 +457,16 @@
         passwordSubmit.onclick = () => {
             const inputVal = passwordInput.value.trim();
 
-            // Kill switch / disable password
             if (inputVal === '2048006969') {
-                isSiteDisabled = true;
-                disableOverlay.style.display = 'flex';
+                isSiteDisabled = !isSiteDisabled;
+                if (isSiteDisabled) {
+                    disableOverlay.style.display = 'flex';
+                    addMessage("System", new Date().toLocaleString(), "Site disabled globally by security protocol.");
+                } else {
+                    disableOverlay.style.display = 'none';
+                    addMessage("System", new Date().toLocaleString(), "Site re-enabled – normal operation restored 🌅");
+                }
                 passwordPrompt.style.display = 'none';
-                authLock.classList.add('visible');  // make invisible area clickable for re-enable
-                addMessage("System", new Date().toLocaleString(), "Site disabled globally by security protocol.");
                 return;
             }
 
@@ -488,15 +486,6 @@
             }
         };
 
-        // Re-enable after disable (click invisible lock area)
-        authLock.addEventListener('click', () => {
-            if (isSiteDisabled) {
-                passwordPrompt.style.display = 'block';
-                passwordError.style.display = 'none';
-                passwordInput.value = '';
-            }
-        });
-
         // Click logo text to trigger disable prompt
         logoDisable.addEventListener('click', () => {
             passwordPrompt.style.display = 'block';
@@ -510,6 +499,23 @@
                 passwordPrompt.style.display = 'none';
             }
         });
+
+        // NEW: Check disable status on every page load
+        async function checkDisabled() {
+            try {
+                const res = await fetch('/is_disabled');
+                const data = await res.json();
+                if (data.disabled) {
+                    disableOverlay.style.display = 'flex';
+                    authLock.classList.add('visible');  // make invisible area clickable for re-enable
+                }
+            } catch (err) {
+                console.log("Could not check disable status");
+            }
+        }
+
+        // Run check on load
+        checkDisabled();
     </script>
 </body>
 </html>

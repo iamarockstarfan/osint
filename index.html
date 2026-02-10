@@ -3,28 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TOMAR OSINT – Professional Intelligence Tool</title>
+    <title>TOMAR OSINT – Advanced Intelligence</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #0f121a;
-            --card: #161b22;
-            --text: #e2e8f0;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --border: #2d3748;
-            --glow: rgba(59, 130, 246, 0.25);
+            --bg: #0f0f1a;
+            --card: #161b2e;
+            --text: #e2e8f9;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
             --success: #10b981;
+            --danger: #ef4444;
+            --border: #2d3748;
+            --glow: rgba(99, 102, 241, 0.35);
+            --shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         [data-theme="light"] {
             --bg: #f8fafc;
             --card: #ffffff;
             --text: #1e293b;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
             --border: #e2e8f0;
-            --glow: rgba(37, 99, 235, 0.15);
+            --glow: rgba(99, 102, 241, 0.25);
+            --shadow: 0 8px 25px rgba(0,0,0,0.12);
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -32,98 +35,125 @@
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
+            line-height: 1.6;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+        .container { 
+            max-width: 1280px; 
+            margin: 0 auto; 
+            padding: 1.5rem 1rem; 
+        }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
+            padding: 1.25rem 0;
             border-bottom: 1px solid var(--border);
-            margin-bottom: 32px;
+            margin-bottom: 2.5rem;
         }
 
         .logo {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(90deg, var(--accent), #60a5fa);
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), #a5b4fc);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .controls button {
             background: var(--card);
             border: 1px solid var(--border);
             color: var(--text);
-            padding: 10px 14px;
-            border-radius: 8px;
+            padding: 0.75rem 1.1rem;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.25s;
-            margin-left: 12px;
+            transition: all 0.3s ease;
+            margin-left: 0.9rem;
+            font-size: 1rem;
         }
 
         .controls button:hover {
             background: var(--accent);
             color: white;
             border-color: var(--accent);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
         }
 
-        .home, .chat { animation: fadeIn 0.8s ease-out; }
+        .home, .chat {
+            animation: fadeIn 0.9s ease-out;
+        }
+
         .home.hidden, .chat.hidden { display: none; }
 
         .hero {
             text-align: center;
-            padding: 80px 20px;
+            padding: 7rem 1.5rem 5rem;
             background: var(--card);
-            border-radius: 16px;
+            border-radius: 20px;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
         }
 
         .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 16px;
-            background: linear-gradient(90deg, var(--accent), #a5b4fc);
+            font-size: 3.5rem;
+            margin-bottom: 1.2rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), #c084fc);
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .hero p { font-size: 1.2rem; max-width: 800px; margin: 0 auto 40px; opacity: 0.9; line-height: 1.6; }
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 720px;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+        }
 
         .features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin-top: 48px;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-top: 4rem;
         }
 
         .feature {
             background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s;
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.4s ease;
         }
 
         .feature:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 1px var(--glow);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3), 0 0 0 2px var(--glow);
         }
 
-        .feature h3 { color: var(--accent); margin-bottom: 16px; font-size: 1.4rem; }
+        .feature h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
 
-        .feature ul { list-style: none; font-size: 1rem; line-height: 1.8; }
+        .feature ul {
+            list-style: none;
+            font-size: 1.05rem;
+        }
 
         .feature li {
-            margin-bottom: 8px;
+            margin-bottom: 0.8rem;
             position: relative;
-            padding-left: 28px;
+            padding-left: 1.8rem;
         }
 
         .feature li::before {
@@ -137,154 +167,162 @@
         .start-btn {
             display: block;
             width: fit-content;
-            margin: 48px auto 0;
-            padding: 16px 48px;
-            background: var(--accent);
+            margin: 4rem auto 0;
+            padding: 1.2rem 3.5rem;
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
             color: white;
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.35rem;
+            font-weight: 700;
             border: none;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.35s ease;
+            box-shadow: 0 10px 30px rgba(99,102,241,0.4);
         }
 
         .start-btn:hover {
-            background: var(--accent-hover);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(59,130,246,0.35);
+            transform: translateY(-5px) scale(1.04);
+            box-shadow: 0 20px 50px rgba(99,102,241,0.5);
         }
 
         .chat {
             background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
 
         .chat-header {
-            padding: 16px 24px;
-            background: rgba(15,23,42,0.7);
+            padding: 1.2rem 2rem;
+            background: rgba(15,23,42,0.6);
             border-bottom: 1px solid var(--border);
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .status {
+            color: var(--success);
+            font-weight: 500;
         }
 
         .messages {
-            padding: 24px;
-            height: 60vh;
+            padding: 2rem;
+            height: 65vh;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 1.2rem;
         }
 
         .message {
-            max-width: 80%;
-            padding: 14px 18px;
-            border-radius: 14px;
-            animation: fadeInUp 0.5s ease-out;
+            max-width: 82%;
+            padding: 1rem 1.4rem;
+            border-radius: 18px;
+            animation: slideIn 0.5s ease-out;
+            line-height: 1.5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .sent {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
             color: white;
             margin-left: auto;
-            border-bottom-right-radius: 4px;
+            border-bottom-right-radius: 6px;
         }
 
         .received {
             background: #1e293b;
             border: 1px solid var(--border);
             margin-right: auto;
-            border-bottom-left-radius: 4px;
+            border-bottom-left-radius: 6px;
         }
 
         .file-download {
-            margin-top: 12px;
+            margin-top: 0.9rem;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 20px;
-            background: rgba(16,185,129,0.15);
-            border: 1px solid rgba(16,185,129,0.4);
+            gap: 0.7rem;
+            padding: 0.7rem 1.4rem;
+            background: rgba(16,185,129,0.18);
+            border: 1px solid rgba(16,185,129,0.45);
             color: #10b981;
-            border-radius: 10px;
+            border-radius: 12px;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.25s;
+            transition: all 0.3s;
         }
 
         .file-download:hover {
-            background: rgba(16,185,129,0.25);
-            border-color: #10b981;
+            background: rgba(16,185,129,0.3);
             transform: translateY(-2px);
         }
 
         .input-area {
-            padding: 16px 24px;
+            padding: 1.2rem 2rem;
             background: var(--card);
             border-top: 1px solid var(--border);
             display: flex;
-            gap: 12px;
+            gap: 1rem;
         }
 
         input[type="text"] {
             flex: 1;
-            padding: 14px 18px;
+            padding: 1rem 1.4rem;
             background: #0f172a;
             border: 1px solid var(--border);
             color: var(--text);
-            border-radius: 10px;
-            font-size: 1rem;
+            border-radius: 14px;
+            font-size: 1.05rem;
+            transition: all 0.3s;
         }
 
         input:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+            box-shadow: 0 0 0 4px rgba(99,102,241,0.25);
         }
 
         button.primary {
-            padding: 14px 28px;
-            background: var(--accent);
+            padding: 1rem 2.2rem;
+            background: linear-gradient(135deg, var(--accent), #7c3aed);
             color: white;
             border: none;
-            border-radius: 10px;
-            font-weight: 600;
+            border-radius: 14px;
+            font-weight: 700;
             cursor: pointer;
+            transition: all 0.35s;
         }
 
-        button.primary:hover { background: var(--accent-hover); }
-
-        .pagination {
-            padding: 16px 24px;
-            background: var(--card);
-            border-top: 1px solid var(--border);
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            font-size: 0.95rem;
+        button.primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(99,102,241,0.45);
         }
 
-        .pagination button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding: 5rem 1rem 3.5rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .start-btn { padding: 1rem 2.8rem; font-size: 1.2rem; }
         }
     </style>
 </head>
 <body data-theme="dark">
 
     <div class="container">
-        <!-- Home Page -->
+        <!-- Home / Landing -->
         <div class="home" id="home">
             <header>
                 <div class="logo">TOMAR OSINT</div>
@@ -294,52 +332,38 @@
             </header>
 
             <div class="hero">
-                <h1>Advanced Open-Source Intelligence</h1>
-                <p>Professional-grade OSINT tool powered by Telegram bots. Search phones, emails, usernames, vehicles, IPs and more — fast and discreet.</p>
+                <h1>Professional OSINT Platform</h1>
+                <p>Fast, discreet and powerful intelligence gathering using Telegram automation. Search phones, emails, usernames, IPs, VINs and more.</p>
 
                 <div class="features">
+                    <!-- You can keep or expand your features list here -->
                     <div class="feature">
-                        <h3><i class="fas fa-phone"></i> Phone / Email</h3>
+                        <h3><i class="fas fa-phone"></i> Phone & Email</h3>
                         <ul>
-                            <li>+40712345678 (RO)</li>
-                            <li>ivan.petrov@gmail.com</li>
-                            <li>Full name leak check</li>
+                            <li>Owner info / linked accounts</li>
+                            <li>Social media connections</li>
+                            <li>Location history (where available)</li>
                         </ul>
                     </div>
-
                     <div class="feature">
-                        <h3><i class="fas fa-car"></i> Vehicle Search</h3>
+                        <h3><i class="fas fa-user"></i> Username & IP</h3>
                         <ul>
-                            <li>O999МУ777 (Russia)</li>
-                            <li>ВО4561АХ</li>
-                            <li>XTA21150053965897 (VIN)</li>
+                            <li>Cross-platform lookup</li>
+                            <li>Geolocation & ISP</li>
+                            <li>Proxy / VPN detection</li>
                         </ul>
                     </div>
-
                     <div class="feature">
-                        <h3><i class="fab fa-telegram-plane"></i> Telegram Account</h3>
+                        <h3><i class="fas fa-car"></i> Vehicle & VIN</h3>
                         <ul>
-                            <li>@username</li>
-                            <li>314159265 (ID)</li>
-                            <li>Full name / bio / photo</li>
+                            <li>Registration details</li>
+                            <li>History reports</li>
+                            <li>Linked owners</li>
                         </ul>
-                    </div>
-
-                    <div class="feature">
-                        <h3><i class="fas fa-map-marker-alt"></i> IP / Geo</h3>
-                        <ul>
-                            <li>185.XX.XX.XX</li>
-                            <li>City / ISP / Proxy check</li>
-                        </ul>
-                    </div>
-
-                    <div class="feature">
-                        <h3><i class="fas fa-file-lines"></i> Mass Search</h3>
-                        <p>Upload .txt file with one query per line (phones, emails, usernames, etc.)</p>
                     </div>
                 </div>
 
-                <button id="startBtn" class="start-btn">Start Intelligence Gathering</button>
+                <button id="startBtn" class="start-btn">Start Intelligence Session</button>
             </div>
         </div>
 
@@ -349,30 +373,20 @@
                 <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
                     <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
-                    <button id="resetBtn"><i class="fas fa-trash-alt"></i> Reset</button>
+                    <button id="resetBtn"><i class="fas fa-trash-can"></i> Clear Chat</button>
                 </div>
             </header>
 
             <div class="chat-container">
                 <div class="chat-header">
-                    <span>Live Intelligence Feed</span>
-                    <span class="status" id="status">Connecting...</span>
+                    <span>Intelligence Feed</span>
+                    <span class="status" id="status">Ready</span>
                 </div>
 
                 <div class="messages" id="messages"></div>
 
-                <div class="pagination">
-                    <button id="prevBtn"><i class="fas fa-chevron-left"></i> Prev</button>
-                    <span id="pageInfo">Page 1 / 1</span>
-                    <button id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
-                </div>
-
-                <button id="downloadBtn" style="margin: 16px auto; display: block; padding: 12px 24px; background: var(--success); color: white; border: none; border-radius: 8px; cursor: pointer;">
-                    <i class="fas fa-file-export"></i> Export Full Session
-                </button>
-
                 <div class="input-area">
-                    <input type="text" id="text" placeholder="Enter phone, email, username, VIN, IP..." autocomplete="off">
+                    <input type="text" id="text" placeholder="Enter phone, email, username, IP, VIN..." autocomplete="off">
                     <button id="sendBtn" class="primary"><i class="fas fa-paper-plane"></i> Search</button>
                 </div>
             </div>
@@ -385,14 +399,9 @@
         themeToggle.onclick = () => {
             const current = document.body.dataset.theme;
             document.body.dataset.theme = current === 'light' ? 'dark' : 'light';
-            themeToggle.innerHTML = current === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
-        };
-
-        // Show chat
-        document.getElementById('startBtn').onclick = () => {
-            document.getElementById('home').classList.add('hidden');
-            document.getElementById('chat').classList.remove('hidden');
-            status.textContent = "Connected";
+            themeToggle.innerHTML = current === 'light' 
+                ? '<i class="fas fa-moon"></i>' 
+                : '<i class="fas fa-sun"></i>';
         };
 
         // Elements
@@ -400,14 +409,9 @@
         const input = document.getElementById('text');
         const sendBtn = document.getElementById('sendBtn');
         const status = document.getElementById('status');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const pageInfo = document.getElementById('pageInfo');
-        const downloadBtn = document.getElementById('downloadBtn');
 
         let allMessages = [];
-        let currentPage = 1;
-        const messagesPerPage = 20;
+        let pollingInterval = null;
 
         // Add message to UI
         function addMessage(sender, time, text, file_path = null) {
@@ -437,6 +441,7 @@
             addMessage("You", now, text);
 
             status.textContent = "Searching...";
+            status.style.color = "var(--accent)";
             input.value = "";
 
             try {
@@ -447,98 +452,72 @@
                 });
                 if (!res.ok) throw new Error();
                 status.textContent = "Done";
+                status.style.color = "var(--success)";
             } catch {
                 status.textContent = "Error";
-                status.style.color = "#ef4444";
+                status.style.color = "var(--danger)";
             }
-            setTimeout(() => status.textContent = "Connected", 2000);
+            setTimeout(() => {
+                status.textContent = "Ready";
+                status.style.color = "var(--success)";
+            }, 2200);
         }
 
         sendBtn.onclick = sendMessage;
-        input.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+        input.addEventListener('keypress', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
 
-        // Load messages from backend
+        // Load new messages from backend (only called after start)
         async function loadMessages() {
             try {
                 const res = await fetch('/messages');
                 const data = await res.json();
                 const serverMsgs = data.messages || [];
 
-                // Only add new messages (simple dedup by time+text prefix)
-                const existing = new Set(allMessages.map(m => m.time + m.text.slice(0,50)));
+                const existing = new Set(allMessages.map(m => m.time + m.text.slice(0,60)));
                 serverMsgs.forEach(msg => {
-                    const key = msg.time + msg.text.slice(0,50);
+                    const key = msg.time + msg.text.slice(0,60);
                     if (!existing.has(key)) {
                         allMessages.push(msg);
                         addMessage(msg.sender, msg.time, msg.text, msg.file_path);
                     }
                 });
-
-                renderPagination();
-            } catch {
-                console.log("Failed to load messages");
+            } catch (err) {
+                console.log("Failed to load messages:", err);
             }
         }
 
-        function renderPagination() {
-            const total = Math.ceil(allMessages.length / messagesPerPage) || 1;
-            pageInfo.textContent = `Page ${currentPage} / ${total}`;
-            prevBtn.disabled = currentPage === 1;
-            nextBtn.disabled = currentPage >= total;
-        }
+        // Start session → begin polling
+        document.getElementById('startBtn').onclick = () => {
+            document.getElementById('home').classList.add('hidden');
+            document.getElementById('chat').classList.remove('hidden');
+            status.textContent = "Connected";
+            status.style.color = "var(--success)";
 
-        prevBtn.onclick = () => { if (currentPage > 1) currentPage--, renderPage(currentPage); };
-        nextBtn.onclick = () => { if (currentPage * messagesPerPage < allMessages.length) currentPage++, renderPage(currentPage); };
-
-        function renderPage(page) {
-            const start = (page - 1) * messagesPerPage;
-            const end = start + messagesPerPage;
-            const pageMsgs = allMessages.slice(start, end);
-
-            messagesDiv.innerHTML = '';
-            pageMsgs.forEach(m => addMessage(m.sender, m.time, m.text, m.file_path));
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            renderPagination();
-        }
-
-        // Export log
-        downloadBtn.onclick = () => {
-            if (!allMessages.length) return alert("No data to export");
-            const content = allMessages.map(m => `[${m.time}] ${m.sender}: ${m.text}`).join('\n');
-            const blob = new Blob([content], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `tomar_osint_${Date.now()}.txt`;
-            a.click();
-            URL.revokeObjectURL(url);
+            // Start polling only now
+            loadMessages();
+            pollingInterval = setInterval(loadMessages, 5000);
         };
 
-        // Reset
-        document.getElementById('resetBtn').onclick = async () => {
-            if (!confirm("Clear session?")) return;
+        // Reset → only clear frontend
+        document.getElementById('resetBtn').onclick = () => {
+            if (!confirm("Clear current chat? (only this browser)")) return;
+
             allMessages = [];
             messagesDiv.innerHTML = '';
-            currentPage = 1;
-            renderPagination();
-            await fetch('/send', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                body: 'text=/start'
-            });
+            addMessage("System", new Date().toLocaleString(), "Chat cleared locally.");
         };
 
-        // Initial load + poll
-        loadMessages();
-        setInterval(loadMessages, 5000);
-
-        // Wake-up hint on slow start
-        setTimeout(() => {
-            if (allMessages.length === 0 && status.textContent === "Connecting...") {
-                status.textContent = "Free server waking up... (30-90s)";
+        // Optional: stop polling when page is hidden (save resources)
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && pollingInterval) {
+                clearInterval(pollingInterval);
+                pollingInterval = null;
+            } else if (!document.hidden && !pollingInterval && !document.getElementById('home').classList.contains('hidden')) {
+                pollingInterval = setInterval(loadMessages, 5000);
             }
-        }, 8000);
+        });
     </script>
 </body>
-
 </html>

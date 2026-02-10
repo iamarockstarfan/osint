@@ -36,23 +36,6 @@
             min-height: 100vh;
             line-height: 1.6;
             user-select: none;
-            transition: all 0.6s ease;
-        }
-        .disabled {
-            background: #000 !important;
-            color: #f0f0f0 !important;
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.4rem;
-            font-weight: 600;
-            text-align: center;
-            padding: 2rem;
-            text-shadow: 0 0 20px rgba(255,255,255,0.3);
-            letter-spacing: 1px;
         }
         .container { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem; position: relative; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2.5rem; animation: slideDown 1s ease-out; }
@@ -167,7 +150,7 @@
     <div class="container">
         <div class="home" id="home">
             <header>
-                <div class="logo" id="logo-disable">TOMAR OSINT</div>
+                <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
                     <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
                 </div>
@@ -188,7 +171,7 @@
 
         <div class="chat hidden" id="chat">
             <header>
-                <div class="logo" id="logo-disable">TOMAR OSINT</div>
+                <div class="logo">TOMAR OSINT</div>
                 <div class="controls">
                     <button class="theme-toggle" id="themeToggle"><i class="fas fa-sun"></i></button>
                     <button id="resetBtn"><i class="fas fa-trash-can"></i> Clear Chat</button>
@@ -210,15 +193,15 @@
             <div class="footer">Developed by Tomar</div>
         </div>
 
-        <!-- Invisible lock area (always present but transparent & hidden until needed) -->
+        <!-- Invisible lock area (clickable bottom-right, always invisible) -->
         <div id="auth-lock"></div>
 
         <!-- Password prompt -->
         <div id="password-prompt">
-            <h3 style="margin:0 0 12px; color:var(--accent);">Enter Password</h3>
+            <h3 style="margin:0 0 10px; color:var(--accent);">Enter Password</h3>
             <input type="password" id="password-input" placeholder="Enter password">
             <button id="password-submit">Unlock</button>
-            <p id="password-error" style="color:var(--danger); margin-top:10px; display:none;">Wrong password – try again</p>
+            <p id="password-error" style="color:var(--danger); margin-top:8px; display:none;">Wrong password – try again</p>
         </div>
 
         <!-- Disable overlay (nicer black screen) -->
@@ -248,12 +231,11 @@
         const passwordSubmit = document.getElementById('password-submit');
         const passwordError = document.getElementById('password-error');
         const disableOverlay = document.getElementById('disable-overlay');
-        const logoDisable = document.getElementById('logo-disable');
 
         let allMessages = [];
         let pollingInterval = null;
-        let isSiteDisabled = false;
         let isAuthorized = false;
+        let isSiteDisabled = false;
 
         const blockedTerms = ['ompal', 'tomar', 'aditya', '13341', '735154', '17999'];
         const KILL_PASSWORD = '2048006969';
@@ -457,20 +439,17 @@
         passwordSubmit.onclick = () => {
             const inputVal = passwordInput.value.trim();
 
+            // Kill switch password
             if (inputVal === '2048006969') {
-                isSiteDisabled = !isSiteDisabled;
-                if (isSiteDisabled) {
-                    disableOverlay.style.display = 'flex';
-                    addMessage("System", new Date().toLocaleString(), "Site disabled globally by security protocol.");
-                } else {
-                    disableOverlay.style.display = 'none';
-                    addMessage("System", new Date().toLocaleString(), "Site re-enabled – normal operation restored 🌅");
-                }
+                isSiteDisabled = true;
+                disableOverlay.style.display = 'flex';
                 passwordPrompt.style.display = 'none';
+                authLock.classList.add('visible');  // make invisible area clickable for re-enable
+                addMessage("System", new Date().toLocaleString(), "Site disabled globally by security protocol.");
                 return;
             }
 
-            // Normal time password
+            // Normal time-based password
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
             const mm = String(now.getMinutes()).padStart(2, '0');
@@ -486,7 +465,16 @@
             }
         };
 
-        // Click logo text to trigger disable prompt
+        // Re-enable after disable (invisible lock area)
+        authLock.addEventListener('click', () => {
+            if (isSiteDisabled) {
+                passwordPrompt.style.display = 'block';
+                passwordError.style.display = 'none';
+                passwordInput.value = '';
+            }
+        });
+
+        // Logo click for disable prompt
         logoDisable.addEventListener('click', () => {
             passwordPrompt.style.display = 'block';
             passwordError.style.display = 'none';
@@ -499,23 +487,6 @@
                 passwordPrompt.style.display = 'none';
             }
         });
-
-        // NEW: Check disable status on every page load
-        async function checkDisabled() {
-            try {
-                const res = await fetch('/is_disabled');
-                const data = await res.json();
-                if (data.disabled) {
-                    disableOverlay.style.display = 'flex';
-                    authLock.classList.add('visible');  // make invisible area clickable for re-enable
-                }
-            } catch (err) {
-                console.log("Could not check disable status");
-            }
-        }
-
-        // Run check on load
-        checkDisabled();
     </script>
 </body>
 </html>

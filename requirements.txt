@@ -2,3 +2,4 @@ fastapi
 uvicorn
 pyrogram
 python-dotenv
+python-multipart   # ← add this line (critical!)

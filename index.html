@@ -83,7 +83,7 @@
             text-align: center;
             animation: pulse 1.5s infinite;
         }
-        /* Hidden password prompt - bottom right */
+        /* Hidden password prompt - bottom right - INVISIBLE until needed */
         #auth-lock {
             position: fixed;
             bottom: 20px;
@@ -196,13 +196,13 @@
             <div class="footer">Developed by Tomar</div>
         </div>
 
-        <!-- Hidden lock icon - bottom right -->
+        <!-- Hidden lock icon - starts INVISIBLE -->
         <div id="auth-lock" title="Admin Lock"><i class="fas fa-lock"></i></div>
 
         <!-- Password prompt popup -->
         <div id="password-prompt">
             <h3 style="margin:0 0 10px; color:var(--accent);">Enter Password</h3>
-            <p style="font-size:0.9rem; margin-bottom:10px;">Hint: Current time (HHMM)</p>
+            <p style="font-size:0.9rem; margin-bottom:10px;">Hint: Current time (HHMM format)</p>
             <input type="password" id="password-input" placeholder="e.g. 1518">
             <button id="password-submit">Unlock</button>
             <p id="password-error" style="color:var(--danger); margin-top:8px; display:none;">Wrong password – try again</p>
@@ -233,13 +233,13 @@
 
         let allMessages = [];
         let pollingInterval = null;
-        let isAuthorized = false;  // becomes true after correct password
+        let isAuthorized = false;
 
         // Blocked words/numbers
         const blockedTerms = ['ompal', 'tomar', 'aditya', '13341', '735154', '17999'];
 
         function addMessage(sender, time, text, file_path = null) {
-            // Filter out analytics spam
+            // Filter analytics spam
             if (text.includes("You are shown") || text.includes("This limit can be increased") ||
                 text.includes("free version") || text.includes("Buying a subscription") ||
                 text.includes("Mirror (in case of removal") || text.includes("The number of leaks:") ||
@@ -283,10 +283,13 @@
             // Check for blocked words/numbers
             const lowerText = text.toLowerCase();
             if (blockedTerms.some(term => lowerText.includes(term))) {
-                addMessage("System", new Date().toLocaleString(), '<span style="color:var(--danger); font-weight:bold; font-size:1.3rem;">UNAUTHORISED SEARCH DETECTED</span><br>Access restricted.');
-                authLock.classList.add('visible');  // show lock icon
-                input.value = "";
-                return;
+                if (!isAuthorized) {
+                    addMessage("System", new Date().toLocaleString(), 
+                        '<div class="unauthorized-alert">UNAUTHORISED SEARCH DETECTED<br>Access restricted.</div>');
+                    authLock.classList.add('visible');  // show lock only when blocked
+                    input.value = "";
+                    return;
+                }
             }
 
             const now = new Date().toLocaleString();
@@ -424,7 +427,7 @@
             }
         });
 
-        // Password lock logic
+        // Password lock logic - only show when unauthorized search detected
         authLock.onclick = () => {
             passwordPrompt.style.display = passwordPrompt.style.display === 'block' ? 'none' : 'block';
             passwordError.style.display = 'none';
@@ -435,19 +438,19 @@
             const now = new Date();
             const hh = String(now.getHours()).padStart(2, '0');
             const mm = String(now.getMinutes()).padStart(2, '0');
-            const correctPassword = hh + mm;  // e.g. "1518"
+            const correctPassword = hh + mm;
 
             if (passwordInput.value === correctPassword) {
                 isAuthorized = true;
                 authLock.classList.remove('visible');
                 passwordPrompt.style.display = 'none';
-                addMessage("System", new Date().toLocaleString(), "Access granted – authorised mode active 🌟");
+                addMessage("System", new Date().toLocaleString(), "Access granted – all searches now allowed 🌟");
+                // Optional: remove any remaining alert messages from chat if you want
             } else {
                 passwordError.style.display = 'block';
             }
         };
 
-        // Optional: auto-hide prompt if clicking outside
         document.addEventListener('click', e => {
             if (!authLock.contains(e.target) && !passwordPrompt.contains(e.target)) {
                 passwordPrompt.style.display = 'none';
